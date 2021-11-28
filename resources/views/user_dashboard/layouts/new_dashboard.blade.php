@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-xl-12">
         <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header d-block d-sm-flex border-0">
                       <div>
@@ -273,9 +273,9 @@
                                             <div class="card-info text-white">
                                             <p class="mb-1">Wallets</p>
                                             <!--LOGO & Currency Code-->
-                                            <h2 class="fs-36 text-white mb-sm-4 mb-3">
                                                 @if(empty($wallet->currency->logo))
-                                                    <img src="{{asset('public/user_dashboard/images/favicon.png')}}" class="img-responsive" style="float: none;">
+                                                    <div>
+                                                        <img src="{{asset('public/user_dashboard/images/favicon.png')}}" class="img-responsive" style="float: none;">
                                                     <span class="float-right">
                                                          <!--BALANCE-->
                                                             <span class="float-right" style="position: relative;top: 7px;">
@@ -300,8 +300,10 @@
                                                                 @endif
                                                             </span>
                                                     </span>
+                                                    </div>
                                                 @else
-                                                    <img src='{{asset("public/uploads/currency_logos/".$wallet->currency->logo)}}' class="img-responsive" style="float: none;">
+                                                    <div>
+                                                        <img src='{{asset("public/uploads/currency_logos/".$wallet->currency->logo)}}' class="img-responsive" style="float: none;">
                                                     <span class="float-right">
                                                          <!--BALANCE-->
                                                         <span class="float-right" style="position: relative;top: 7px;">
@@ -326,6 +328,34 @@
                                                             @endif
                                                         </span>
                                                     </span>
+                                                    </div>
+                                                    <div>
+                                                        <img src='{{asset("public/uploads/currency_logos/".$wallet->currency->logo)}}' class="img-responsive" style="float: none;">
+                                                    <span class="float-right">
+                                                         <!--BALANCE-->
+                                                        <span class="float-right" style="position: relative;top: 7px;">
+                                                            @if($wallet->balance > 0)
+                                                                @if ($wallet->currency->type != 'fiat')
+                                                                    <span class="text-white">{{ '+'.$wallet->balance }}</span>
+                                                                @else
+                                                                    <span class="text-white">{{ '+'.formatNumber($wallet->balance) }}</span>
+                                                                @endif
+                                                            @elseif($wallet->balance == 0)
+                                                                @if ($wallet->currency->type != 'fiat')
+                                                                    <span>{{ $wallet->balance }}</span>
+                                                                @else
+                                                                    <span>{{ '+'.formatNumber($wallet->balance) }}</span>
+                                                                @endif
+                                                            @elseif($wallet->balance < 0)
+                                                                @if ($wallet->currency->type != 'fiat')
+                                                                    <span class="text-danger">{{ $wallet->balance }}</span>
+                                                                @else
+                                                                    <span class="text-danger">{{ '+'.formatNumber($wallet->balance) }}</span>
+                                                                @endif
+                                                            @endif
+                                                        </span>
+                                                    </span>
+                                                    </div>
                                                 @endif
 
                                                 <!--Currency Code-->
@@ -334,7 +364,6 @@
                                                 @else
                                             <span>{{ $wallet->currency->code }}</span>
                                         @endif
-                                    </h2>
 
 
                                     <!--Crypto Send & Receiv Buttons-->
@@ -364,22 +393,22 @@
                             @lang('message.dashboard.right-table.no-wallet')
                         @endif
 
-                        <div class="col-md-12">
+                        <div class="col-md-12 text-lg-right text-md-left ic-btn-main">
                             @if(Common::has_permission(auth()->id(),'manage_deposit'))
-                                    <a href="{{url('deposit')}}" class="btn btn-success float-right">
+                                    <a href="{{url('deposit')}}" class="btn btn-success btn-sm">
                                         <img src="{{asset('public/user_dashboard/images/deposit.png')}}" class="img-responsive" style="margin-top:3px;">&nbsp;@lang('message.dashboard.button.deposit')
                                     </a>
                             @endif
                             @if(Common::has_permission(auth()->id(),'manage_withdrawal'))
 
-                                    <a href="{{url('payouts')}}" class="btn btn-success float-right">
+                                    <a href="{{url('payouts')}}" class="btn btn-success btn-sm">
                                         <img src="{{asset('public/user_dashboard/images/withdrawal.png')}}" class="img-responsive"> &nbsp;@lang('message.dashboard.button.payout')
                                     </a>
                             @endif
 
                             @if(Common::has_permission(auth()->id(),'manage_exchange'))
 
-                                    <a href="{{url('exchange')}}" class="btn btn-success float-right">
+                                    <a href="{{url('exchange')}}" class="btn btn-success btn-sm">
                                         <img src="{{asset('public/user_dashboard/images/exchange.png')}}" class="img-responsive" style="margin-top:3px;">
                                         @lang('message.dashboard.button.exchange')
                                     </a>

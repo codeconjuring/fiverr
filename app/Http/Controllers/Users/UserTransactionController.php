@@ -26,6 +26,7 @@ class UserTransactionController extends Controller
 
     public function index()
     {
+
         $transaction      = new Transaction();
         $data['menu']     = 'transactions';
         $data['sub_menu'] = 'transactions';
@@ -76,7 +77,7 @@ class UserTransactionController extends Controller
                     break;
             }
         }
-        return view('user_dashboard.transactions.index', $data);
+        return view('user_dashboard.transactions.new_index', $data);
     }
 
     public function getTransaction(Request $request)

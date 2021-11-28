@@ -22,7 +22,7 @@
     <link href="{{ asset('public/new_dashboard/public/vendor/chartist/css/chartist.min.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('public/new_dashboard/public/vendor/owl-carousel/owl.carousel.css') }}" rel="stylesheet" type="text/css"/>
 	<link href="{{ asset('public/new_dashboard/public/css/style.css') }}" rel="stylesheet" type="text/css"/>
-
+    @yield('css');
     <script type="text/javascript">
         var SITE_URL = "{{url('/')}}";
     </script>

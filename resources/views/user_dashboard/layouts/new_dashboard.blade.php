@@ -49,8 +49,11 @@
                                             </div>
                                         </div>
 
+                                        @php
+                                            $data=explode(' ',dateFormat($transaction->created_at));
+                                        @endphp
 
-                                        <span class="mb-lg-0 mb-3 text-black px-2">{{ dateFormat($transaction->created_at) }}</span>
+                                        <span class="mb-lg-0 mb-3 text-black px-2">{{ $data[0] }} <br> {{ $data[1].' '.$data[2] }}</span>
 
 
                                                 <!-- Amount -->
@@ -115,40 +118,40 @@
                                             <td class="text-left">
                                                 @if($transaction->transaction_type_id)
                                                     @if($transaction->transaction_type_id==Request_From)
-                                                        <p class="mb-0">
+                                                        <b class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
-                                                        </p>
-                                                        <p class="mb-0">@lang('Request Sent')</p>
+                                                        </b>
+                                                        <b class="mb-0">@lang('Request Sent')</b>
                                                     @elseif($transaction->transaction_type_id==Request_To)
-                                                        <p class="mb-0">
+                                                        <b class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
-                                                        </p>
-                                                        <p class="mb-0">@lang('Request Received')</p>
+                                                        </b>
+                                                        <b class="mb-0">@lang('Request Received')</b>
 
                                                     @elseif($transaction->transaction_type_id == Transferred)
-                                                        <p class="mb-0">
+                                                        <b class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
-                                                        </p>
-                                                        <p>@lang('Transferred')</p>
+                                                        </b>
+                                                        <b>@lang('Transferred')</b>
 
                                                     @elseif($transaction->transaction_type_id == Received)
-                                                        <p class="mb-0">
+                                                        <b class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
-                                                        </p>
-                                                        <p class="mb-0">@lang('Received')</p>
+                                                        </b>
+                                                        <b class="mb-0">@lang('Received')</b>
 
                                                     @elseif($transaction->transaction_type_id == Order_Received)
-                                                        <p class="mb-0">
+                                                        <b class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
-                                                        </p>
-                                                        <p class="mb-0">Order Received</p>
+                                                        </b>
+                                                        <b class="mb-0">Order Received</b>
                                                     @elseif($transaction->transaction_type_id == Order_Product)
-                                                        <p class="mb-0">
+                                                        <b class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
-                                                        </p>
-                                                        <p class="mb-0">Order Product</p>
+                                                        </b>
+                                                        <b class="mb-0">Order Product</b>
                                                     @else
-                                                        <p class="mb-0">{{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}</p>
+                                                        <b class="mb-0">{{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}</b>
                                                     @endif
                                                 @endif
                                             </td>
@@ -168,7 +171,7 @@
                                                     }
                                                 ?>
                                                 <td class="text-left">
-                                                    <p class="mb-0">
+                                                    <b class="mb-0">
                                                         @if($transaction->transaction_type->name == 'Deposit')
                                                             @if ($transaction->payment_method->name == 'Bank')
                                                                 {{ $payment_method }} ({{ $transaction->bank->bank_name }})
@@ -202,17 +205,17 @@
                                                             {{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}
                                                         @endif
                                                     @endif
-                                                    </p>
+                                                    </b>
                                                 </td>
                                             @endif
                                         @else
                                         <td class="text-left">
-                                            <p class="mb-0">{{ $transaction->merchant->business_name }}</p>
+                                            <p class="mb-0 ">{{ $transaction->merchant->business_name }}</p>
                                             @if($transaction->transaction_type_id)
                                                 <p class="mb-0">{{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}</p>
                                             @endif
                                         </td>
-                                    @endif
+                                         @endif
 
                                     <!-- Status -->
 

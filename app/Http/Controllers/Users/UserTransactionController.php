@@ -120,19 +120,19 @@ class UserTransactionController extends Controller
                         $pm = $transaction->payment_method->name;
                     }
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.deposit.deposited-to') . "</label>" .
-                    "<div class=''>" . $transaction->currency->code . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.deposit.deposited-to') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->currency->code . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.deposit.payment-method') . "</label>" .
-                    "<div  class=''>" . $pm . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.deposit.payment-method') . "</p>" .
+                    "<div  class='text-black font-w500'>" . $pm . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.deposit.deposited-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber($transaction->subtotal)) . "</div>" . //r2
@@ -169,15 +169,15 @@ class UserTransactionController extends Controller
                         $pm = $transaction->payment_method->name;
                     }
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.withdrawal.withdrawan-with') . "</label>" .
-                    "<div  class=''>" . $pm . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.withdrawal.withdrawan-with') . "</p>" .
+                    "<div  class='text-black font-w500'>" . $pm . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.withdrawal.withdrawan-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -222,26 +222,26 @@ class UserTransactionController extends Controller
 
                     if ($transaction->user_type == 'unregistered') {
                         if (!empty($transaction->email)) {
-                            $unregisteredEmailOrPhone = "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.transferred-to') . "</label>" .
+                            $unregisteredEmailOrPhone = "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.transferred-to') . "</p>" .
                             "<div>" . $transaction->email . "</div><br>";
                         } else {
-                            $unregisteredEmailOrPhone = "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.transferred-to') . "</label>" .
+                            $unregisteredEmailOrPhone = "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.transferred-to') . "</p>" .
                             "<div>" . $transaction->phone . "</div><br>";
                         }
                     } else {
-                        $unregisteredEmailOrPhone = "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.transferred-to') . "</label>" .
-                            "<div class=''>" . $receiverName . " <strong>(" . $receiverEmailorPhone . ")</strong>" . "</div>" .
+                        $unregisteredEmailOrPhone = "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.transferred-to') . "</p>" .
+                            "<div class='text-black font-w500'>" . $receiverName . " <strong>(" . $receiverEmailorPhone . ")</strong>" . "</div>" .
                             "</div>";
                     }
 
                     $data['html'] = "<div class='form-group trans_details'>" .
                     $unregisteredEmailOrPhone .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left'>" . __('message.dashboard.left-table.transferred.transferred-amount') . "</div>" .
                     "<div class='right'>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -257,7 +257,7 @@ class UserTransactionController extends Controller
                         "<div class='clearfix'></div>" .
                         "</div>" .
                         "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.note') . "</label>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.note') . "</p>" .
                         "<div  class='act-detail-font'>" . $transaction->note . "</div>" .
                         "</div>" .
                         "<div class='form-group trans_details'>" .
@@ -270,7 +270,7 @@ class UserTransactionController extends Controller
                         "<div class='clearfix'></div>" .
                         "</div>" .
                         "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.note') . "</label>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.note') . "</p>" .
                         "<div  class='act-detail-font'>" . $transaction->note . "</div>" .
                         "</div>" .
                         "<div class='form-group trans_details'>" .
@@ -289,15 +289,15 @@ class UserTransactionController extends Controller
                     }
 
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.received.received-from') . "</label>" .
-                    "<div class=''>" . $transaction->transfer->sender->first_name . ' ' . $transaction->transfer->sender->last_name . " <strong>(" . $senderEmailOrPhone . ")</strong>" . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.received.received-from') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->transfer->sender->first_name . ' ' . $transaction->transfer->sender->last_name . " <strong>(" . $senderEmailOrPhone . ")</strong>" . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.received.received-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber($transaction->subtotal)) . "</div>" .
@@ -308,7 +308,7 @@ class UserTransactionController extends Controller
                     "<div class='clearfix'></div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.note') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.note') . "</p>" .
                     "<div class='act-detail-font'>" . $transaction->note . "</div>" .
                     "</div>" .
 
@@ -319,15 +319,15 @@ class UserTransactionController extends Controller
 
                 case Exchange_From:
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.exchange-from.from-wallet') . "</label>" .
-                    "<div class=''>" . $transaction->currency->code . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.exchange-from.from-wallet') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->currency->code . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.exchange-from.exchange-from-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -359,15 +359,15 @@ class UserTransactionController extends Controller
 
                 case Exchange_To:
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.exchange-to.to-wallet') . "</label>" .
-                    "<div class=''>" . $transaction->currency->code . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.exchange-to.to-wallet') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->currency->code . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.exchange-from.exchange-from-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -384,15 +384,15 @@ class UserTransactionController extends Controller
 
                 case Voucher_Created:
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.voucher-created.voucher-code') . "</label>" .
-                    "<div class=''>" . $transaction->voucher->code . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.voucher-created.voucher-code') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->voucher->code . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.voucher-created.voucher-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -423,19 +423,19 @@ class UserTransactionController extends Controller
 
                 case Voucher_Activated:
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.voucher-created.voucher-code') . "</label>" .
-                    "<div class=''>" . $transaction->voucher->code . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.voucher-created.voucher-code') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->voucher->code . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . "Voucher Created By" . "</label>" .
-                    "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . "Voucher Created By" . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.voucher-created.voucher-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -458,29 +458,29 @@ class UserTransactionController extends Controller
                     }
                     if ($transaction->user_type == 'registered') {
                         $data['html'] = "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.form.request_to') . "</label>" .
-                        "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . '<strong> (' . (!empty($transaction->email) ? $transaction->email : $transaction->phone) . ')</strong>' . "</div>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.form.request_to') . "</p>" .
+                        "<div class='text-black font-w500'>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . '<strong> (' . (!empty($transaction->email) ? $transaction->email : $transaction->phone) . ')</strong>' . "</div>" .
                             "</div>";
                     } else {
                         if (!empty($transaction->email)) {
                             $data['html'] = "<div class='form-group trans_details'>" .
-                            "<label for='exampleInputEmail1'>" . __('message.form.request_to') . "</label>" .
-                            "<div class=''>" . $transaction->email . "</div>" .
+                            "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.form.request_to') . "</p>" .
+                            "<div class='text-black font-w500'>" . $transaction->email . "</div>" .
                                 "</div>";
                         } else {
                             $data['html'] = "<div class='form-group trans_details'>" .
-                            "<label for='exampleInputEmail1'>" . __('message.form.request_to') . "</label>" .
-                            "<div class=''>" . $transaction->phone . "</div>" .
+                            "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.form.request_to') . "</p>" .
+                            "<div class='text-black font-w500'>" . $transaction->phone . "</div>" .
                                 "</div>";
                         }
 
                     }
                     $data['html'] .= "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.send-request.request.confirmation.requested-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -491,7 +491,7 @@ class UserTransactionController extends Controller
                     "<div class='clearfix'></div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.note') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.note') . "</p>" .
                     "<div  class='act-detail-font'>" . $transaction->note . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
@@ -512,20 +512,20 @@ class UserTransactionController extends Controller
                     //
                     if ($transaction->user_type == 'registered') {
                         $data['html'] = "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.form.request_from') . "</label>" .
-                        "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . ' <strong>(' . (!empty($transaction->email) ? $transaction->end_user->email : $transaction->end_user->formattedPhone) . ')</strong>' . "</div>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.form.request_from') . "</p>" .
+                        "<div class='text-black font-w500'>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . ' <strong>(' . (!empty($transaction->email) ? $transaction->end_user->email : $transaction->end_user->formattedPhone) . ')</strong>' . "</div>" .
                             "</div>";
                     } else {
                         $data['html'] = "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.email') . "</label>" .
-                        "<div class=''>" . $transaction->email . "</div>";
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.email') . "</p>" .
+                        "<div class='text-black font-w500'>" . $transaction->email . "</div>";
                     }
                     $data['html'] .= "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.send-request.request.confirmation.requested-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -541,7 +541,7 @@ class UserTransactionController extends Controller
                         "<div class='clearfix'></div>" .
                         "</div>" .
                         "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.note') . "</label>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.note') . "</p>" .
                         "<div class='act-detail-font'>" . $transaction->note . "</div>" .
                         "</div>" .
                         "<div class='form-group trans_details'>" .
@@ -554,7 +554,7 @@ class UserTransactionController extends Controller
                         "<div class='clearfix'></div>" .
                         "</div>" .
                         "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.note') . "</label>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transferred.note') . "</p>" .
                         "<div class='act-detail-font'>" . $transaction->note . "</div>" .
                         "</div>" .
                         "<div class='form-group trans_details'>" .
@@ -565,15 +565,15 @@ class UserTransactionController extends Controller
 
                 case Payment_Sent:
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.merchant.payment.merchant') . "</label>" .
-                    "<div class=''>" . $transaction->merchant->business_name . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.merchant.payment.merchant') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->merchant->business_name . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.payment-Sent.payment-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -590,11 +590,11 @@ class UserTransactionController extends Controller
 
                 case Payment_Received:
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.payment-Sent.payment-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -629,7 +629,7 @@ class UserTransactionController extends Controller
 
                     if (isset($receiverAddress)) {
                         $data['html'] .= "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.dashboard.crypto.transactions.receiver-address') . "</label>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.crypto.transactions.receiver-address') . "</p>" .
                             "<div>" . $receiverAddress . "</div>" .
                             "</div>" .
                             "<div class='form-group trans_details'>";
@@ -637,17 +637,17 @@ class UserTransactionController extends Controller
 
                     if (isset($confirmations)) {
                         $data['html'] .= "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.dashboard.crypto.transactions.confirmations') . "</label>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.crypto.transactions.confirmations') . "</p>" .
                             "<div>" . $confirmations . "</div>" .
                             "</div>" .
                             "<div class='form-group trans_details'>";
                     }
 
-                    $data['html'] .= "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
+                    $data['html'] .= "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
                     "<div>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.crypto.send.confirm.sent-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, $transaction->subtotal) . "</div>" .
@@ -671,7 +671,7 @@ class UserTransactionController extends Controller
                     // For "Tracking block io account receiver address changes, if amount is sent from other payment gateways like CoinBase, CoinPayments, etc"
                     if (isset($senderAddress)) {
                         $data['html'] .= "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.dashboard.crypto.transactions.sender-address') . "</label>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.crypto.transactions.sender-address') . "</p>" .
                             "<div>" . $senderAddress . "</div>" .
                             "</div>" .
                             "<div class='form-group trans_details'>";
@@ -679,18 +679,18 @@ class UserTransactionController extends Controller
 
                     if (isset($confirmations)) {
                         $data['html'] .= "<div class='form-group trans_details'>" .
-                        "<label for='exampleInputEmail1'>" . __('message.dashboard.crypto.transactions.confirmations') . "</label>" .
+                        "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.crypto.transactions.confirmations') . "</p>" .
                             "<div>" . $confirmations . "</div>" .
                             "</div>" .
                             "<div class='form-group trans_details'>";
                     }
 
-                    $data['html'] .= "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
+                    $data['html'] .= "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
                     "<div>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.received.received-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, $transaction->subtotal) . "</div>" .
@@ -707,15 +707,15 @@ class UserTransactionController extends Controller
 
                 case Order_Product:
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('Paid To') . "</label>" .
-                    "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('Paid To') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
 
                     "<div class='left '>" . 'Order Payment Amount' . "</div>" .
@@ -736,15 +736,15 @@ class UserTransactionController extends Controller
 
                 case Order_Received:
                     $data['html'] = "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('Paid By') . "</label>" .
-                    "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('Paid By') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('Order Received Amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
@@ -766,11 +766,11 @@ class UserTransactionController extends Controller
                     $data['html'] = "<div class='form-group trans_details'>" .
 
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
-                    "<div class=''>" . $transaction->uuid . "</div>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.transaction-id') . "</p>" .
+                    "<div class='text-black font-w500'>" . $transaction->uuid . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
-                    "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.details') . "</label>" .
+                    "<p class='exampleInputEmail1 fs-12 mb-2'>" . __('message.dashboard.left-table.details') . "</p>" .
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . 'Referral Award Amount' . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .

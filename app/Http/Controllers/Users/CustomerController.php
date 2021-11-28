@@ -188,7 +188,7 @@ class CustomerController extends Controller
         $data['transactions'] = $transaction->dashboardTransactionList();
 
         $data['wallets'] = $wallets = Wallet::with('currency:id,type,logo,code,status')->where(['user_id' => Auth::user()->id])->orderBy('balance', 'ASC')->get(['id', 'currency_id', 'balance', 'is_default']);
-
+        // return $data;
         return view('user_dashboard.layouts.new_dashboard', $data);
     }
 

@@ -148,8 +148,9 @@
 
                                     <!-- Status -->
 
-                                        <span class="mb-lg-0 mb-3 text-black px-2" id="status_{{$transaction->id}}">
-                                            {{
+                                        <a href="#" class="mb-lg-0 mb-3 btn  btn-md btn-rounded mx-2 @if( $transaction->status=='Blocked') btn-outline-danger @elseif($transaction->status=='Success') btn-outline-success @else btn-outline-info @endif"     id="status_{{$transaction->id}}">
+
+                                          {{
                                                 (
                                                     ($transaction->status == 'Blocked') ? __("Cancelled") :
                                                     (
@@ -157,7 +158,7 @@
                                                     )
                                                 )
                                             }}
-                                        <br></span>
+                                        <br></a>
 
 
                                         <!-- Amount -->

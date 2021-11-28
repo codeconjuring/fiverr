@@ -304,6 +304,8 @@
                                                                 @endif
                                                             </span>
                                                     </span>
+
+
                                                 @else
                                                     <img src='{{asset("public/uploads/currency_logos/".$wallet->currency->logo)}}' class="img-responsive" style="float: none;">
                                                     <span class="float-right">
@@ -358,29 +360,6 @@
 
 
                                     </div>
-                                    <div class="col-md-12">
-                                        @if(Common::has_permission(auth()->id(),'manage_deposit'))
-
-                                                <button href="{{url('deposit')}}" class="btn btn-success">
-                                                    <img src="{{asset('public/user_dashboard/images/deposit.png')}}" class="img-responsive" style="margin-top:3px;">&nbsp;@lang('message.dashboard.button.deposit')
-                                                </button>
-
-                                        @endif
-                                        @if(Common::has_permission(auth()->id(),'manage_withdrawal'))
-
-                                                <button href="{{url('payouts')}}" class="btn btn-success ">
-                                                    <img src="{{asset('public/user_dashboard/images/withdrawal.png')}}" class="img-responsive"> &nbsp;@lang('message.dashboard.button.payout')
-                                                </button>
-                                        @endif
-
-                                        @if(Common::has_permission(auth()->id(),'manage_exchange'))
-
-                                                <button href="{{url('exchange')}}" class="btn btn-success">
-                                                    <img src="{{asset('public/user_dashboard/images/exchange.png')}}" class="img-responsive" style="margin-top:3px;">
-                                                    @lang('message.dashboard.button.exchange')
-                                                </button>
-                                        @endif
-                                    </div>
                                     </div>
                                     <a href="#"><i class="fa fa-caret-down" aria-hidden="true"></i></a>
                                 </div>
@@ -391,10 +370,38 @@
                             @lang('message.dashboard.right-table.no-wallet')
                         @endif
 
+                        <div class="col-md-12">
+                            @if(Common::has_permission(auth()->id(),'manage_deposit'))
+
+                                    <a href="{{url('deposit')}}" class="btn btn-success float-right">
+                                        <img src="{{asset('public/user_dashboard/images/deposit.png')}}" class="img-responsive" style="margin-top:3px;">&nbsp;@lang('message.dashboard.button.deposit')
+                                    </a>
+
+                            @endif
+                            @if(Common::has_permission(auth()->id(),'manage_withdrawal'))
+
+                                    <a href="{{url('payouts')}}" class="btn btn-success float-right">
+                                        <img src="{{asset('public/user_dashboard/images/withdrawal.png')}}" class="img-responsive"> &nbsp;@lang('message.dashboard.button.payout')
+                                    </a>
+                            @endif
+
+                            @if(Common::has_permission(auth()->id(),'manage_exchange'))
+
+                                    <a href="{{url('exchange')}}" class="btn btn-success float-right">
+                                        <img src="{{asset('public/user_dashboard/images/exchange.png')}}" class="img-responsive" style="margin-top:3px;">
+                                        @lang('message.dashboard.button.exchange')
+                                    </a>
+                            @endif
+                        </div>
+
+
+
 
 
                 </div>
                 </div>
+
+
 
 
 

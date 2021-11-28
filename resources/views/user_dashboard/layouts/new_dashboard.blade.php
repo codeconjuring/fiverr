@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-xl-12">
         <div class="row">
-            <div class="col-xl-8 col-lg-6 col-md-7 col-sm-8">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header d-block d-sm-flex border-0">
                       <div>
@@ -38,7 +38,8 @@
                                             </span> </div>
 
                                             <div>
-                                                <h6 class="fs-16 font-w700 mb-0"><a class="text-black" href="javascript:void(0)">{{ dateFormat($transaction->created_at) }}</a></h6>
+                                                <h6 class="fs-16 font-w700 mb-0">
+                                                    <a class="text-black" href="javascript:void(0)">{{ dateFormat($transaction->created_at) }}</a></h6>
                                             </div>
                                         </div>
                                         <!-- Transaction Type -->
@@ -48,40 +49,40 @@
                                             <td class="text-left">
                                                 @if($transaction->transaction_type_id)
                                                     @if($transaction->transaction_type_id==Request_From)
-                                                        <p>
+                                                        <p class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
                                                         </p>
-                                                        <p>@lang('Request Sent')</p>
+                                                        <p class="mb-0">@lang('Request Sent')</p>
                                                     @elseif($transaction->transaction_type_id==Request_To)
-                                                        <p>
+                                                        <p class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
                                                         </p>
-                                                        <p>@lang('Request Received')</p>
+                                                        <p class="mb-0">@lang('Request Received')</p>
 
                                                     @elseif($transaction->transaction_type_id == Transferred)
-                                                        <p>
+                                                        <p class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
                                                         </p>
                                                         <p>@lang('Transferred')</p>
 
                                                     @elseif($transaction->transaction_type_id == Received)
-                                                        <p>
+                                                        <p class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
                                                         </p>
-                                                        <p>@lang('Received')</p>
+                                                        <p class="mb-0">@lang('Received')</p>
 
                                                     @elseif($transaction->transaction_type_id == Order_Received)
-                                                        <p>
+                                                        <p class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
                                                         </p>
-                                                        <p>Order Received</p>
+                                                        <p class="mb-0">Order Received</p>
                                                     @elseif($transaction->transaction_type_id == Order_Product)
-                                                        <p>
+                                                        <p class="mb-0">
                                                             {{ $transaction->end_user->first_name.' '.$transaction->end_user->last_name }}
                                                         </p>
-                                                        <p>Order Product</p>
+                                                        <p class="mb-0">Order Product</p>
                                                     @else
-                                                        <p>{{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}</p>
+                                                        <p class="mb-0">{{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}</p>
                                                     @endif
                                                 @endif
                                             </td>
@@ -101,7 +102,7 @@
                                                     }
                                                 ?>
                                                 <td class="text-left">
-                                                    <p>
+                                                    <p class="mb-0">
                                                         @if($transaction->transaction_type->name == 'Deposit')
                                                             @if ($transaction->payment_method->name == 'Bank')
                                                                 {{ $payment_method }} ({{ $transaction->bank->bank_name }})
@@ -125,23 +126,23 @@
 
                                                     @if($transaction->transaction_type_id)
                                                         @if($transaction->transaction_type_id==Request_From)
-                                                            <p>@lang('Request Sent')</p>
+                                                            <p class="mb-0">@lang('Request Sent')</p>
                                                         @elseif($transaction->transaction_type_id==Request_To)
-                                                            <p>@lang('Request Received')</p>
+                                                            <p class="mb-0">@lang('Request Received')</p>
 
                                                         @elseif($transaction->transaction_type_id == Withdrawal)
-                                                            <p>@lang('Payout')</p>
+                                                            <p class="mb-0">@lang('Payout')</p>
                                                         @else
-                                                            <p>{{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}</p>
+                                                            <p class="mb-0">{{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}</p>
                                                         @endif
                                                     @endif
                                                 </td>
                                             @endif
                                         @else
                                         <td class="text-left">
-                                            <p>{{ $transaction->merchant->business_name }}</p>
+                                            <p class="mb-0">{{ $transaction->merchant->business_name }}</p>
                                             @if($transaction->transaction_type_id)
-                                                <p>{{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}</p>
+                                                <p class="mb-0">{{ __(str_replace('_',' ',$transaction->transaction_type->name)) }}</p>
                                             @endif
                                         </td>
                                     @endif
@@ -149,7 +150,6 @@
                                     <!-- Status -->
 
                                         <a href="#" class="mb-lg-0 mb-3 btn  btn-md btn-rounded mx-2 @if( $transaction->status=='Blocked') btn-outline-danger @elseif($transaction->status=='Success') btn-outline-success @else btn-outline-info @endif"     id="status_{{$transaction->id}}">
-
                                           {{
                                                 (
                                                     ($transaction->status == 'Blocked') ? __("Cancelled") :
@@ -158,61 +158,62 @@
                                                     )
                                                 )
                                             }}
-                                        <br></a>
+                                        <br>
+                                        </a>
 
 
                                         <!-- Amount -->
                                         @if($transaction->transaction_type_id == Deposit)
                                                 @if($transaction->subtotal > 0)
                                                     <span class="mb-lg-0 mb-3 text-black font-w600 px-2">
-                                                        <p class="text-left text-success">+{{ formatNumber($transaction->subtotal) }}</p>
-                                                        <p class="text-left">{{ $transaction->currency->code }}</p>
+                                                        <p class="text-left text-success mb-0">+{{ formatNumber($transaction->subtotal) }}</p>
+                                                        <p class="text-left mb-0">{{ $transaction->currency->code }}</p>
                                                     </span>
                                                 @endif
                                             @elseif($transaction->transaction_type_id == Withdrawal)
-                                                <span class="mb-lg-0 mb-3 text-black font-w600 px-2">
-                                                    <p class="text-left text-danger">-{{ formatNumber($transaction->subtotal) }}</p>
-                                                    <p class="text-left">{{ $transaction->currency->code }}</p>
+                                                <span class="mb-lg-0 mb-3 text-black font-w600 px-2 mb-0">
+                                                    <p class="text-left text-danger mb-0">-{{ formatNumber($transaction->subtotal) }}</p>
+                                                    <p class="text-left mb-0">{{ $transaction->currency->code }}</p>
                                                 </span>
                                             @elseif($transaction->transaction_type_id == Payment_Received)
                                                 @if($transaction->subtotal > 0)
                                                     @if($transaction->status == 'Refund')
-                                                        <span class="mb-lg-0 mb-3 text-black font-w600 px-2">
-                                                            <p class="text-left text-danger">-{{ formatNumber($transaction->subtotal) }}</p>
-                                                            <p class="text-left">{{ $transaction->currency->code }}</p>
+                                                        <span class="mb-lg-0 mb-3 text-black font-w600 px-2 mb-0">
+                                                            <p class="text-left text-danger mb-0">-{{ formatNumber($transaction->subtotal) }}</p>
+                                                            <p class="text-left mb-0">{{ $transaction->currency->code }}</p>
                                                         </span>
                                                     @else
-                                                        <span class="mb-lg-0 mb-3 text-black font-w600 px-2">
-                                                            <p class="text-left text-success">+{{ formatNumber($transaction->subtotal) }}</p>
-                                                            <p class="text-left">{{ $transaction->currency->code }}</p>
+                                                        <span class="mb-lg-0 mb-3 text-black font-w600 px-2 mb-0">
+                                                            <p class="text-left text-success mb-0">+{{ formatNumber($transaction->subtotal) }}</p>
+                                                            <p class="text-left mb-0">{{ $transaction->currency->code }}</p>
                                                         </span>
                                                     @endif
                                                 @elseif($transaction->subtotal == 0)
-                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2" >
+                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2 mb-0" >
                                                         <p>{{ formatNumber($transaction->subtotal) }}</p>
-                                                        <p class="text-left">{{ $transaction->currency->code }}</p>
+                                                        <p class="text-left mb-0">{{ $transaction->currency->code }}</p>
                                                     </span>
                                                 @elseif($transaction->subtotal < 0)
-                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2">
-                                                        <p class="text-left text-danger">{{ formatNumber($transaction->subtotal) }}</p>
-                                                        <p class="text-left">{{ $transaction->currency->code }}</p>
+                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2 mb-0">
+                                                        <p class="text-left text-danger mb-0">{{ formatNumber($transaction->subtotal) }}</p>
+                                                        <p class="text-left mb-0">{{ $transaction->currency->code }}</p>
                                                     </span>
                                                 @endif
                                             @else
                                                 @if($transaction->total > 0)
-                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2">
-                                                        <p class="text-left text-success">{{ $transaction->currency->type != 'fiat' ? "+".$transaction->total : "+".formatNumber($transaction->total) }}</p>
-                                                        <p class="text-left">{{ $transaction->currency->code }}</p>
+                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2 mb-0">
+                                                        <p class="text-left text-succes mb-0s">{{ $transaction->currency->type != 'fiat' ? "+".$transaction->total : "+".formatNumber($transaction->total) }}</p>
+                                                        <p class="text-left mb-0">{{ $transaction->currency->code }}</p>
                                                     </span>
                                                 @elseif($transaction->total == 0)
-                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2">
+                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2 mb-0">
                                                         <p>{{ formatNumber($transaction->total) }}</p>
-                                                        <p class="text-left">{{ $transaction->currency->code }}</p>
+                                                        <p class="text-left mb-0">{{ $transaction->currency->code }}</p>
                                                     </span>
                                                 @elseif($transaction->total < 0)
-                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2">
-                                                        <p class="text-left text-danger">{{ $transaction->currency->type != 'fiat' ? $transaction->total : formatNumber($transaction->total) }}</p>
-                                                        <p class="text-left">{{ $transaction->currency->code }}</p>
+                                                    <span class="mb-lg-0 mb-3 text-black font-w600 px-2 mb-0">
+                                                        <p class="text-left text-danger mb-0">{{ $transaction->currency->type != 'fiat' ? $transaction->total : formatNumber($transaction->total) }}</p>
+                                                        <p class="text-left mb-0">{{ $transaction->currency->code }}</p>
                                                     </span>
                                                 @endif
                                             @endif
@@ -220,7 +221,7 @@
                                     </div>
 
                                         <div id="default_collapseOne{{ $key }}" class="collapse accordion__body" data-parent="#accordion-one">
-                                            <div class="col-md-7 col-sm-12 text-left" id="html_{{$key}}"></div>
+                                            <div class="col-md-12 col-sm-12 text-left d-flex justify-content-between flex-wrap" id="html_{{$key}}"></div>
                                         {{-- <div class="d-flex flex-wrap align-items-center accordion__body--text p-0">
                                             <div class="mr-3 mb-3">
                                             <p class="fs-12 mb-2">ID Payment</p>
@@ -252,16 +253,10 @@
 
                                     @endforeach
                                 @else
-                                <p>@lang('message.dashboard.left-table.no-transaction')</p>
+                                <p class="mb-0">@lang('message.dashboard.left-table.no-transaction')</p>
                             @endif
-
-
-
-
                         </div>
                       </div>
-
-
                     </div>
                   </div>
             </div>
@@ -305,8 +300,6 @@
                                                                 @endif
                                                             </span>
                                                     </span>
-
-
                                                 @else
                                                     <img src='{{asset("public/uploads/currency_logos/".$wallet->currency->logo)}}' class="img-responsive" style="float: none;">
                                                     <span class="float-right">
@@ -337,7 +330,7 @@
 
                                                 <!--Currency Code-->
                                                 @if ($wallet->currency->type == 'fiat' && $wallet->is_default == 'Yes')
-                                                    <span>{{ $wallet->currency->code }}&nbsp;<span class="badge badge-secondary btn-sm">@lang('message.dashboard.right-table.default-wallet-label')</span></span>
+                                                    <span>{{ $wallet->currency->code }}&nbsp;<span class="badge badge-secondary btn-sm p-1">@lang('message.dashboard.right-table.default-wallet-label')</span></span>
                                                 @else
                                             <span>{{ $wallet->currency->code }}</span>
                                         @endif
@@ -373,11 +366,9 @@
 
                         <div class="col-md-12">
                             @if(Common::has_permission(auth()->id(),'manage_deposit'))
-
                                     <a href="{{url('deposit')}}" class="btn btn-success float-right">
                                         <img src="{{asset('public/user_dashboard/images/deposit.png')}}" class="img-responsive" style="margin-top:3px;">&nbsp;@lang('message.dashboard.button.deposit')
                                     </a>
-
                             @endif
                             @if(Common::has_permission(auth()->id(),'manage_withdrawal'))
 

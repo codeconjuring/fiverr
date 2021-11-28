@@ -1,0 +1,2 @@
+INSERT INTO `payment_methods` (`name`, `status`) VALUES ('Dahabia', 'Active');
+INSERT INTO `metas` (`url`, `title`, `description`, `keywords`) VALUES ('deposit/dahabia-deposit-success', 'Success', 'Success', '');

@@ -253,7 +253,12 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                            
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="6"> @lang('message.dashboard.left-table.no-transaction')</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>

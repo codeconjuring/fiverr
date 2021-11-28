@@ -201,6 +201,16 @@
     <script src="{{ asset('public/new_dashboard/public/js/dashboard/dashboard-1.js') }}" type="text/javascript"></script>
     <script src="{{ asset('public/new_dashboard/public/js/custom.js') }}" type="text/javascript"></script>
     <script src="{{ asset('public/new_dashboard/public/js/deznav-init.js') }}" type="text/javascript"></script>
+    <script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    </script>
+
+
+    @yield('js');
 	</body>
 
 </html>

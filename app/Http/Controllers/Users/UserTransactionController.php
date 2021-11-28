@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Repositories\CryptoCurrencyRepository;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\{DB,
-    Auth
-};
-use Illuminate\Http\Request;
-use App\Models\{Setting,
-    Transaction,
-    Transfer,
-    Wallet
-};
+use App\Models\Setting;
+use App\Models\Transaction;
+use App\Models\Transfer;
+use App\Models\Wallet;
+use App\Repositories\CryptoCurrencyRepository;use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserTransactionController extends Controller
 {
@@ -34,23 +30,19 @@ class UserTransactionController extends Controller
         $data['menu']     = 'transactions';
         $data['sub_menu'] = 'transactions';
 
-        $data['from']     = $from   = isset(request()->from) ? setDateForDb(request()->from) : null;
-        $data['to']       = $to     = isset(request()->to ) ? setDateForDb(request()->to) : null;
-        $data['status']   = $status = isset(request()->status) ? request()->status : 'all';
-        $data['type']     = $type   = isset(request()->type) ? request()->type : 'all';
-        $data['wallet']   = $wallet = isset(request()->wallet) ? request()->wallet : 'all';
+        $data['from']   = $from   = isset(request()->from) ? setDateForDb(request()->from) : null;
+        $data['to']     = $to     = isset(request()->to) ? setDateForDb(request()->to) : null;
+        $data['status'] = $status = isset(request()->status) ? request()->status : 'all';
+        $data['type']   = $type   = isset(request()->type) ? request()->type : 'all';
+        $data['wallet'] = $wallet = isset(request()->wallet) ? request()->wallet : 'all';
 
         $data['transactions'] = $transaction->getTransactions($from, $to, $type, $wallet, $status);
 
-        $data['wallets']      = Wallet::with(['currency:id,code'])->where(['user_id' => Auth::user()->id])->get(['currency_id']);
-        if ($type == Deposit || $type == Withdrawal || $type == 'all')
-        {
+        $data['wallets'] = Wallet::with(['currency:id,code'])->where(['user_id' => Auth::user()->id])->get(['currency_id']);
+        if ($type == Deposit || $type == Withdrawal || $type == 'all') {
             $data['type'] = $type;
-        }
-        else
-        {
-            switch ($type)
-            {
+        } else {
+            switch ($type) {
                 case 'sent':
                     $data['type'] = 'sent';
                     break;
@@ -89,6 +81,7 @@ class UserTransactionController extends Controller
 
     public function getTransaction(Request $request)
     {
+
         $data['status'] = 0;
 
         $transaction = Transaction::with([
@@ -103,35 +96,26 @@ class UserTransactionController extends Controller
         ])->find($request->id);
 
         // Get crypto api log details for Crypto_Sent & Crypto_Received (via custom relationship)
-        if (!empty($transaction->cryptoapi_log))
-        {
+        if (!empty($transaction->cryptoapi_log)) {
             $getCryptoDetails = $this->cryptoCurrency->getCryptoPayloadConfirmationsDetails($transaction->transaction_type_id, $transaction->cryptoapi_log->payload, $transaction->cryptoapi_log->confirmations);
-            if (count($getCryptoDetails) > 0)
-            {
+            if (count($getCryptoDetails) > 0) {
                 // For "Tracking block io account receiver address changes, if amount is sent from other payment gateways like CoinBase, CoinPayments, etc"
-                if (isset($getCryptoDetails['senderAddress']))
-                {
-                    $senderAddress   = $getCryptoDetails['senderAddress'];
+                if (isset($getCryptoDetails['senderAddress'])) {
+                    $senderAddress = $getCryptoDetails['senderAddress'];
                 }
-                if (isset($getCryptoDetails['receiverAddress']))
-                {
+                if (isset($getCryptoDetails['receiverAddress'])) {
                     $receiverAddress = $getCryptoDetails['receiverAddress'];
                 }
-                $confirmations   = $getCryptoDetails['confirmations'];
+                $confirmations = $getCryptoDetails['confirmations'];
             }
         }
 
-        if ($transaction->count() > 0)
-        {
-            switch ($transaction->transaction_type_id)
-            {
+        if ($transaction->count() > 0) {
+            switch ($transaction->transaction_type_id) {
                 case Deposit:
-                    if ($transaction->payment_method->name == 'Mts')
-                    {
+                    if ($transaction->payment_method->name == 'Mts') {
                         $pm = getCompanyName();
-                    }
-                    else
-                    {
+                    } else {
                         $pm = $transaction->payment_method->name;
                     }
                     $data['html'] = "<div class='form-group trans_details'>" .
@@ -153,8 +137,7 @@ class UserTransactionController extends Controller
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber($transaction->subtotal)) . "</div>" . //r2
                     "<div class='clearfix'></div>";
                     $fee = abs($transaction->total) - abs($transaction->subtotal);
-                    if ($fee > 0)
-                    {
+                    if ($fee > 0) {
                         $data['html'] .= "<div class='left '>" . __('message.dashboard.left-table.fee') . "</div>" .
                         "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber($transaction->total - $transaction->subtotal)) . "</div>" .
                         "<div class='clearfix'></div>" .
@@ -166,9 +149,7 @@ class UserTransactionController extends Controller
                         "<div class='form-group trans_details'>" .
                         "<a href='" . url('deposit-money/print/' . $transaction->id) . "' target='_blank' class='btn btn-secondary btn-sm'>" . __('message.dashboard.vouchers.success.print') . "</a> &nbsp;&nbsp;" .
                             "</div>";
-                    }
-                    else
-                    {
+                    } else {
                         $data['html'] .= "<hr/>" .
                         "<div class='left '><strong>" . __('message.dashboard.left-table.total') . "</strong></div>" .
                         "<div class='right '><strong>" . moneyFormat($transaction->currency->symbol, formatNumber($transaction->total)) . "</strong></div>" .
@@ -181,12 +162,9 @@ class UserTransactionController extends Controller
                     break;
 
                 case Withdrawal:
-                    if ($transaction->payment_method->name == 'Mts')
-                    {
+                    if ($transaction->payment_method->name == 'Mts') {
                         $pm = getCompanyName();
-                    }
-                    else
-                    {
+                    } else {
                         $pm = $transaction->payment_method->name;
                     }
                     $data['html'] = "<div class='form-group trans_details'>" .
@@ -204,8 +182,7 @@ class UserTransactionController extends Controller
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
                         "<div class='clearfix'></div>";
                     $fee = abs($transaction->total) - abs($transaction->subtotal);
-                    if ($fee > 0)
-                    {
+                    if ($fee > 0) {
                         $data['html'] .= "<div class='left '>" . __('message.dashboard.left-table.fee') . "</div>" .
                         "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber($fee)) . "</div>" .
                         "<div class='clearfix'></div>" .
@@ -217,9 +194,7 @@ class UserTransactionController extends Controller
                         "<div class='form-group trans_details'>" .
                         "<a href='" . url('withdrawal-money/print/' . $transaction->id) . "' target='_blank' class='btn btn-secondary btn-sm'>" . __('message.dashboard.vouchers.success.print') . "</a> &nbsp;&nbsp;" .
                             "</div>";
-                    }
-                    else
-                    {
+                    } else {
                         $data['html'] .= "<hr/>" .
                         "<div class='left '><strong>" . __('message.dashboard.left-table.total') . "</strong></div>" .
                         "<div class='right '><strong>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->total))) . "</strong></div>" .
@@ -232,33 +207,30 @@ class UserTransactionController extends Controller
                     break;
 
                 case Transferred:
-                    
+
                     $receiverEmailorPhone = '';
                     $receiverName         = '';
                     if (isset($transaction->email) && ($transaction->user_type == 'registered')) {
                         $receiverEmailorPhone = $transaction->end_user->email;
-                        $receiverName = $transaction->transfer->receiver->first_name . ' ' . $transaction->transfer->receiver->last_name;
+                        $receiverName         = $transaction->transfer->receiver->first_name . ' ' . $transaction->transfer->receiver->last_name;
                     } else if (isset($transaction->phone) && ($transaction->user_type == 'registered')) {
                         $receiverEmailorPhone = $transaction->end_user->formattedPhone;
-                        $receiverName = $transaction->transfer->receiver->first_name . ' ' . $transaction->transfer->receiver->last_name;
+                        $receiverName         = $transaction->transfer->receiver->first_name . ' ' . $transaction->transfer->receiver->last_name;
 
                     }
 
-                    if ($transaction->user_type == 'unregistered')
-                    {
-                        if (! empty($transaction->email)) {
+                    if ($transaction->user_type == 'unregistered') {
+                        if (!empty($transaction->email)) {
                             $unregisteredEmailOrPhone = "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.transferred-to') . "</label>" .
                             "<div>" . $transaction->email . "</div><br>";
                         } else {
                             $unregisteredEmailOrPhone = "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.transferred-to') . "</label>" .
                             "<div>" . $transaction->phone . "</div><br>";
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $unregisteredEmailOrPhone = "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.transferred-to') . "</label>" .
-                        "<div class=''>" . $receiverName . " <strong>(" . $receiverEmailorPhone . ")</strong>" . "</div>" .
-                        "</div>";
+                            "<div class=''>" . $receiverName . " <strong>(" . $receiverEmailorPhone . ")</strong>" . "</div>" .
+                            "</div>";
                     }
 
                     $data['html'] = "<div class='form-group trans_details'>" .
@@ -274,8 +246,7 @@ class UserTransactionController extends Controller
                     "<div class='right'>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
                         "<div class='clearfix'></div>";
                     $fee = abs($transaction->total) - abs($transaction->subtotal);
-                    if ($fee > 0)
-                    {
+                    if ($fee > 0) {
                         $data['html'] .= "<div class='left'>" . __('message.dashboard.left-table.fee') . "</div>" .
                         "<div class='right'>" . moneyFormat($transaction->currency->symbol, formatNumber($fee)) . "</div>" .
                         "<div class='clearfix'></div>" .
@@ -291,9 +262,7 @@ class UserTransactionController extends Controller
                         "<div class='form-group trans_details'>" .
                         "<a href='" . url('moneytransfer/print/' . $transaction->id) . "' target='_blank' class='btn btn-secondary btn-sm'>" . __('message.dashboard.vouchers.success.print') . "</a> &nbsp;&nbsp;" .
                             "</div>";
-                    }
-                    else
-                    {
+                    } else {
                         $data['html'] .= "<hr/>" .
                         "<div class='left'><strong>" . __('message.dashboard.left-table.total') . "</strong></div>" .
                         "<div class='right'><strong>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->total))) . "</strong></div>" .
@@ -363,8 +332,7 @@ class UserTransactionController extends Controller
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
                         "<div class='clearfix'></div>";
                     $fee = abs($transaction->total) - abs($transaction->subtotal);
-                    if ($fee > 0)
-                    {
+                    if ($fee > 0) {
                         $data['html'] .= "<div class='left '>" . __('message.dashboard.left-table.fee') . "</div>" .
                         "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber($fee)) . "</div>" .
                         "<div class='clearfix'></div>" .
@@ -376,9 +344,7 @@ class UserTransactionController extends Controller
                         "<div class='form-group trans_details'>" .
                         "<a href='" . url('transactions/exchangeTransactionPrintPdf/' . $transaction->id) . "' target='_blank' class='btn btn-secondary btn-sm'>" . __('message.dashboard.vouchers.success.print') . "</a> &nbsp;&nbsp;" .
                             "</div>";
-                    }
-                    else
-                    {
+                    } else {
                         $data['html'] .= "<hr/>" .
                         "<div class='left '><strong>" . __('message.dashboard.left-table.total') . "</strong></div>" .
                         "<div class='right '><strong>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->total))) . "</strong></div>" .
@@ -429,10 +395,9 @@ class UserTransactionController extends Controller
                     "<div class='clearfix'></div>" .
                     "<div class='left '>" . __('message.dashboard.left-table.voucher-created.voucher-amount') . "</div>" .
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
-                    "<div class='clearfix'></div>";
+                        "<div class='clearfix'></div>";
                     $fee = abs($transaction->total) - abs($transaction->subtotal);
-                    if ($fee > 0)
-                    {
+                    if ($fee > 0) {
                         $data['html'] .= "<div class='left '>" . __('message.dashboard.left-table.fee') . "</div>" .
                         "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber($fee)) . "</div>" .
                         "<div class='clearfix'></div>" .
@@ -454,7 +419,7 @@ class UserTransactionController extends Controller
                             "</div>";
                     }
                     break;
-                    
+
                 case Voucher_Activated:
                     $data['html'] = "<div class='form-group trans_details'>" .
                     "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.voucher-created.voucher-code') . "</label>" .
@@ -462,7 +427,7 @@ class UserTransactionController extends Controller
                     "</div>" .
                     "<div class='form-group trans_details'>" .
                     "<label for='exampleInputEmail1'>" . "Voucher Created By" . "</label>" .
-                    "<div class=''>" . $transaction->end_user->first_name.' '.$transaction->end_user->last_name . "</div>" .
+                    "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
                     "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
@@ -487,31 +452,27 @@ class UserTransactionController extends Controller
                 case Request_From:
                     $conditionForRequestToPhoneAndEMail = !empty($transaction->email) ? $transaction->email : $transaction->phone;
                     $cancel_btn                         = '';
-                    if ($transaction->status == 'Pending')
-                    {
+                    if ($transaction->status == 'Pending') {
                         $cancel_btn = "<button class='btn btn-secondary btn-sm trxnreqfrom' data-notificationType='{$conditionForRequestToPhoneAndEMail}' data='{$transaction->id}' data-type='{$transaction->transaction_type_id}' id='btn_{$transaction->id}'>" . __('message.form.cancel') . "</button>";
                     }
-                    if ($transaction->user_type == 'registered')
-                    {
+                    if ($transaction->user_type == 'registered') {
                         $data['html'] = "<div class='form-group trans_details'>" .
                         "<label for='exampleInputEmail1'>" . __('message.form.request_to') . "</label>" .
-                        "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . '<strong> (' . (! empty($transaction->email) ? $transaction->email : $transaction->phone) . ')</strong>' ."</div>" .
+                        "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . '<strong> (' . (!empty($transaction->email) ? $transaction->email : $transaction->phone) . ')</strong>' . "</div>" .
                             "</div>";
-                    }
-                    else
-                    {
-                        if (! empty($transaction->email)) {
+                    } else {
+                        if (!empty($transaction->email)) {
                             $data['html'] = "<div class='form-group trans_details'>" .
                             "<label for='exampleInputEmail1'>" . __('message.form.request_to') . "</label>" .
                             "<div class=''>" . $transaction->email . "</div>" .
-                                "</div>"; 
+                                "</div>";
                         } else {
                             $data['html'] = "<div class='form-group trans_details'>" .
                             "<label for='exampleInputEmail1'>" . __('message.form.request_to') . "</label>" .
                             "<div class=''>" . $transaction->phone . "</div>" .
-                                "</div>"; 
+                                "</div>";
                         }
-                        
+
                     }
                     $data['html'] .= "<div class='form-group trans_details'>" .
                     "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
@@ -541,23 +502,19 @@ class UserTransactionController extends Controller
                     $conditionForRequestToPhoneAndEMail = !empty($transaction->email) ? $transaction->email : $transaction->phone;
                     $twoButtons                         = '';
                     //
-                    if ($transaction->status == 'Pending')
-                    {
+                    if ($transaction->status == 'Pending') {
                         $twoButtons = "<button class='btn btn-secondary btn-sm trxn' data-notificationType='{$conditionForRequestToPhoneAndEMail}' data='{$transaction->id}' data-type='{$transaction->transaction_type_id}'
                         id='btn_{$transaction->id}'>" . __('message.form.cancel') . "</button>";
 
                         $twoButtons .= " <button class='btn btn-secondary btn-sm trxn_accept' data-rel='" . $transaction->transaction_reference_id . "' data='" . $transaction->id . "' id='acceptbtn_" . $transaction->id . "'> " . __('message.dashboard.left-table.request-to.accept') . " </button>";
                     }
                     //
-                    if ($transaction->user_type == 'registered')
-                    {
+                    if ($transaction->user_type == 'registered') {
                         $data['html'] = "<div class='form-group trans_details'>" .
                         "<label for='exampleInputEmail1'>" . __('message.form.request_from') . "</label>" .
-                        "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . ' <strong>(' . (! empty($transaction->email) ? $transaction->end_user->email : $transaction->end_user->formattedPhone) . ')</strong>' ."</div>" .
+                        "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . ' <strong>(' . (!empty($transaction->email) ? $transaction->end_user->email : $transaction->end_user->formattedPhone) . ')</strong>' . "</div>" .
                             "</div>";
-                    }
-                    else
-                    {
+                    } else {
                         $data['html'] = "<div class='form-group trans_details'>" .
                         "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transferred.email') . "</label>" .
                         "<div class=''>" . $transaction->email . "</div>";
@@ -573,8 +530,7 @@ class UserTransactionController extends Controller
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
                         "<div class='clearfix'></div>";
                     $fee = abs($transaction->total) - abs($transaction->subtotal);
-                    if ($fee > 0)
-                    {
+                    if ($fee > 0) {
                         $data['html'] .= "<div class='left '>" . __('message.dashboard.left-table.fee') . "</div>" .
                         "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber($transaction->charge_percentage + $transaction->charge_fixed)) . "</div>" .
                         "<div class='clearfix'></div>" .
@@ -590,9 +546,7 @@ class UserTransactionController extends Controller
                         "<div class='form-group trans_details'>" .
                         "<a href='" . url('request-payment/print/' . $transaction->id) . "' target='_blank' class='btn btn-secondary btn-sm'>" . __('message.dashboard.vouchers.success.print') . "</a> &nbsp;&nbsp;" . $twoButtons .
                             "</div>";
-                    }
-                    else
-                    {
+                    } else {
                         $data['html'] .= "<hr/>" .
                         "<div class='left '><strong>" . __('message.dashboard.left-table.total') . "</strong></div>" .
                         "<div class='right '><strong>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->total))) . "</strong></div>" .
@@ -645,8 +599,7 @@ class UserTransactionController extends Controller
                     "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber(abs($transaction->subtotal))) . "</div>" .
                         "<div class='clearfix'></div>";
                     $fee = abs($transaction->total) - abs($transaction->subtotal);
-                    if ($fee > 0)
-                    {
+                    if ($fee > 0) {
                         $data['html'] .= "<div class='left '>" . __('message.dashboard.left-table.fee') . "</div>" .
                         "<div class='right '>" . moneyFormat($transaction->currency->symbol, formatNumber($transaction->charge_percentage + $transaction->charge_fixed)) . "</div>" .
                         "<div class='clearfix'></div>" .
@@ -658,9 +611,7 @@ class UserTransactionController extends Controller
                         "<div class='form-group trans_details'>" .
                         "<a href='" . url('transactions/merchant-payment-print/' . $transaction->id) . "' target='_blank' class='btn btn-secondary btn-sm'>" . __('message.dashboard.vouchers.success.print') . "</a> &nbsp;&nbsp;" .
                             "</div>";
-                    }
-                    else
-                    {
+                    } else {
                         $data['html'] .= "<hr/>" .
                         "<div class='left '><strong>" . __('message.dashboard.left-table.total') . "</strong></div>" .
                         "<div class='right '><strong>" . moneyFormat($transaction->currency->symbol, formatNumber($transaction->total)) . "</strong></div>" .
@@ -675,22 +626,20 @@ class UserTransactionController extends Controller
                 case Crypto_Sent:
                     $data['html'] = "";
 
-                    if (isset($receiverAddress))
-                    {
+                    if (isset($receiverAddress)) {
                         $data['html'] .= "<div class='form-group trans_details'>" .
                         "<label for='exampleInputEmail1'>" . __('message.dashboard.crypto.transactions.receiver-address') . "</label>" .
-                        "<div>" . $receiverAddress . "</div>" .
-                        "</div>" .
-                        "<div class='form-group trans_details'>";
+                            "<div>" . $receiverAddress . "</div>" .
+                            "</div>" .
+                            "<div class='form-group trans_details'>";
                     }
 
-                    if (isset($confirmations))
-                    {
+                    if (isset($confirmations)) {
                         $data['html'] .= "<div class='form-group trans_details'>" .
                         "<label for='exampleInputEmail1'>" . __('message.dashboard.crypto.transactions.confirmations') . "</label>" .
-                        "<div>" . $confirmations . "</div>" .
-                        "</div>" .
-                        "<div class='form-group trans_details'>";
+                            "<div>" . $confirmations . "</div>" .
+                            "</div>" .
+                            "<div class='form-group trans_details'>";
                     }
 
                     $data['html'] .= "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
@@ -719,22 +668,20 @@ class UserTransactionController extends Controller
                     $data['html'] = "";
 
                     // For "Tracking block io account receiver address changes, if amount is sent from other payment gateways like CoinBase, CoinPayments, etc"
-                    if (isset($senderAddress))
-                    {
+                    if (isset($senderAddress)) {
                         $data['html'] .= "<div class='form-group trans_details'>" .
                         "<label for='exampleInputEmail1'>" . __('message.dashboard.crypto.transactions.sender-address') . "</label>" .
-                        "<div>" . $senderAddress . "</div>" .
-                        "</div>" .
-                        "<div class='form-group trans_details'>";
+                            "<div>" . $senderAddress . "</div>" .
+                            "</div>" .
+                            "<div class='form-group trans_details'>";
                     }
 
-                    if (isset($confirmations))
-                    {
+                    if (isset($confirmations)) {
                         $data['html'] .= "<div class='form-group trans_details'>" .
                         "<label for='exampleInputEmail1'>" . __('message.dashboard.crypto.transactions.confirmations') . "</label>" .
-                        "<div>" . $confirmations . "</div>" .
-                        "</div>" .
-                        "<div class='form-group trans_details'>";
+                            "<div>" . $confirmations . "</div>" .
+                            "</div>" .
+                            "<div class='form-group trans_details'>";
                     }
 
                     $data['html'] .= "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
@@ -760,7 +707,7 @@ class UserTransactionController extends Controller
                 case Order_Product:
                     $data['html'] = "<div class='form-group trans_details'>" .
                     "<label for='exampleInputEmail1'>" . __('Paid To') . "</label>" .
-                    "<div class=''>" . $transaction->end_user->first_name . ' ' .$transaction->end_user->last_name . "</div>" .
+                    "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
                     "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
@@ -789,7 +736,7 @@ class UserTransactionController extends Controller
                 case Order_Received:
                     $data['html'] = "<div class='form-group trans_details'>" .
                     "<label for='exampleInputEmail1'>" . __('Paid By') . "</label>" .
-                    "<div class=''>" . $transaction->end_user->first_name . ' ' .$transaction->end_user->last_name . "</div>" .
+                    "<div class=''>" . $transaction->end_user->first_name . ' ' . $transaction->end_user->last_name . "</div>" .
                     "</div>" .
                     "<div class='form-group trans_details'>" .
                     "<label for='exampleInputEmail1'>" . __('message.dashboard.left-table.transaction-id') . "</label>" .
@@ -834,16 +781,16 @@ class UserTransactionController extends Controller
                     "</div>" .
                     "<div class='form-group trans_details'>" .
                     "<a href='" . url('transactions/referral-award-print/' . $transaction->id) . "' target='_blank' class='btn btn-secondary btn-sm'>" . __('message.dashboard.vouchers.success.print') . "</a> &nbsp;&nbsp;" .
-                    "</div>";
+                        "</div>";
                     break;
-
 
                 default:
                     $data['html'] = '';
                     break;
             }
         }
-        return json_encode($data);
+        return response()->json($data);
+        // return json_encode($data);
     }
 
     /**
@@ -908,21 +855,17 @@ class UserTransactionController extends Controller
         $data['transaction'] = $transaction = Transaction::with(['currency:id,symbol', 'cryptoapi_log:id,object_id,payload,confirmations'])->where(['id' => $id])->first();
 
         // Get crypto api log details for Crypto_Sent & Crypto_Received (via custom relationship)
-        if (!empty($transaction->cryptoapi_log))
-        {
+        if (!empty($transaction->cryptoapi_log)) {
             $getCryptoDetails = $this->cryptoCurrency->getCryptoPayloadConfirmationsDetails($transaction->transaction_type_id, $transaction->cryptoapi_log->payload, $transaction->cryptoapi_log->confirmations);
-            if (count($getCryptoDetails) > 0)
-            {
+            if (count($getCryptoDetails) > 0) {
                 // For "Tracking block io account receiver address changes, if amount is sent from other payment gateways like CoinBase, CoinPayments, etc"
-                if (isset($getCryptoDetails['senderAddress']))
-                {
-                    $data['senderAddress']   = $getCryptoDetails['senderAddress'];
+                if (isset($getCryptoDetails['senderAddress'])) {
+                    $data['senderAddress'] = $getCryptoDetails['senderAddress'];
                 }
-                if (isset($getCryptoDetails['receiverAddress']))
-                {
+                if (isset($getCryptoDetails['receiverAddress'])) {
                     $data['receiverAddress'] = $getCryptoDetails['receiverAddress'];
                 }
-                $data['confirmations']   = $getCryptoDetails['confirmations'];
+                $data['confirmations'] = $getCryptoDetails['confirmations'];
             }
         }
 
@@ -945,7 +888,7 @@ class UserTransactionController extends Controller
         $data['companyInfo'] = Setting::where(['type' => 'general', 'name' => 'logo'])->first(['value']);
 
         $data['transaction'] = $transaction = Transaction::with(['currency:id,symbol'])
-        ->where(['id' => $id])->first(['uuid', 'created_at', 'status', 'currency_id','subtotal', 'charge_percentage', 'charge_fixed', 'total']);
+            ->where(['id' => $id])->first(['uuid', 'created_at', 'status', 'currency_id', 'subtotal', 'charge_percentage', 'charge_fixed', 'total']);
         // dd($transaction);
 
         $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp']);
@@ -962,4 +905,3 @@ class UserTransactionController extends Controller
         $mpdf->Output('referral-award_' . time() . '.pdf', 'I'); // this will output data
     }
 }
-

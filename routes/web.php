@@ -1,8 +1,7 @@
 <?php
 
 ////////////////////Clear Project////////////////////////////////////////
-Route::get('/clearapp', function ()
-{
+Route::get('/clearapp', function () {
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
     Artisan::call('view:clear');
@@ -27,10 +26,8 @@ Route::post('send/crypto-notification', 'CryptoNotificationController@sendCrypto
 Route::post('user-registration-check-email', 'Auth\RegisterController@checkUserRegistrationEmail');
 
 // Unauthenticated Admin
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['no_auth:admin', 'locale']], function ()
-{
-    Route::get('/', function ()
-    {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['no_auth:admin', 'locale']], function () {
+    Route::get('/', function () {
         return view('admin.auth.login');
     })->name('admin');
 
@@ -41,8 +38,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['no_
 });
 
 // Authenticated Admin
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['guest:admin', 'locale']], function ()
-{
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['guest:admin', 'locale']], function () {
     Route::get('home', 'DashboardController@index')->name('dashboard');
     Route::get('adminlogout', 'AdminController@logout');
     Route::get('profile', 'AdminController@profile');
@@ -355,8 +351,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
     Route::get('crypto/preference-disabled', 'DashboardController@adminCryptoPreferenceDisabled');
 
     // Check enabled currencies in preference
-    Route::group(['middleware' => ['check-enabled-currencies-preference']], function ()
-    {
+    Route::group(['middleware' => ['check-enabled-currencies-preference']], function () {
         //Admin Crypto Send
         Route::match(array('GET', 'POST'), 'users/crypto/send/{id}', 'UserController@eachUserCryptoSend');
         Route::get('users/deposit/crypto/send/get-merchant-user-network-address-with-merchant-balance', 'UserController@getMerchantUserNetworkAddressWithMerchantBalance');
@@ -393,7 +388,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
 
     // Stores
     Route::get('stores', 'StoreController@index')->middleware(['permission:view_store']);
-    Route::match(array('GET','POST'), 'stores/add', 'StoreController@add')->middleware(['permission:add_store']);
+    Route::match(array('GET', 'POST'), 'stores/add', 'StoreController@add')->middleware(['permission:add_store']);
     Route::match(array('GET', 'POST'), 'stores/edit/{id}', 'StoreController@update')->middleware(['permission:edit_store']);
     // Route::get('stores/delete/{id}', 'StoreController@delete')->middleware(['permission:delete_store']);
     Route::post('stores/delete-stores-photo', 'StoreController@deleteStorePhoto');
@@ -402,27 +397,27 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
 
     // Product Categories
     Route::get('product-categories', 'ProductCategoryController@index')->middleware(['permission:view_product_category']);
-    Route::match(array('GET','POST'), 'product-categories/add', 'ProductCategoryController@add')->middleware(['permission:add_product_category']);
+    Route::match(array('GET', 'POST'), 'product-categories/add', 'ProductCategoryController@add')->middleware(['permission:add_product_category']);
     Route::match(array('GET', 'POST'), 'product-categories/edit/{id}', 'ProductCategoryController@update')->middleware(['permission:edit_product_category']);
     // Route::get('product-categories/delete/{id}', 'ProductCategoryController@delete')->middleware(['permission:delete_product_category']);
     Route::post('product-category/delete-product-category-photo', 'ProductCategoryController@deleteProductCategoryPhoto');
 
     // Products
     Route::get('products', 'ProductController@index')->middleware(['permission:view_product']);
-    Route::match(array('GET','POST'), 'products/add', 'ProductController@add')->middleware(['permission:add_product']);
+    Route::match(array('GET', 'POST'), 'products/add', 'ProductController@add')->middleware(['permission:add_product']);
     Route::match(array('GET', 'POST'), 'products/edit/{id}', 'ProductController@update')->middleware(['permission:edit_product']);
     // Route::get('products/delete/{id}', 'ProductController@delete')->middleware(['permission:delete_product']);
-    Route::post('products/product-code-check','ProductController@checkProductCode');
-    Route::post('products/product-update-code-check','ProductController@updateProductCodeCheck');
+    Route::post('products/product-code-check', 'ProductController@checkProductCode');
+    Route::post('products/product-update-code-check', 'ProductController@updateProductCodeCheck');
     Route::post('products/delete-product-photo', 'ProductController@deleteProductPhoto');
     Route::post('products/get-product-categories', 'ProductController@getCategoriesByStore');
 
     // Address Books
     Route::get('address-books', 'AddressBookController@index')->middleware(['permission:view_address_book']);
-    Route::match(array('GET','POST'), 'address-books/add', 'AddressBookController@add')->middleware(['permission:add_address_book']);
+    Route::match(array('GET', 'POST'), 'address-books/add', 'AddressBookController@add')->middleware(['permission:add_address_book']);
     Route::match(array('GET', 'POST'), 'address-books/edit/{id}', 'AddressBookController@update')->middleware(['permission:edit_address_book']);
     // Route::get('address-books/delete/{id}', 'AddressBookController@delete')->middleware(['permission:delete_address_book']);
-    Route::post('address-book/delete-address-book-photo','AddressBookController@deleteAddressBookPhoto');
+    Route::post('address-book/delete-address-book-photo', 'AddressBookController@deleteAddressBookPhoto');
     Route::get('orders', 'OrderController@index');
 
     // Referral Settings
@@ -432,9 +427,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
     Route::match(array('GET', 'POST'), 'settings/edit-referral-setting/{id}', 'ReferralSettingController@updateReferralSetting')->middleware(['permission:edit_referral_settings']);
     Route::get('settings/referral-settings/mass-update-referral-levels', 'ReferralSettingController@massUpdateReferralLevels')->middleware(['permission:edit_referral_settings']);
     Route::post('settings/referral-settings/check-duplicate-level', 'ReferralSettingController@checkDuplicateLevel')->middleware(['permission:add_referral_settings']);
-     
+
     Route::get('users/referral-awards/{id}', 'UserController@eachUserReferralAwards');
-     
+
     Route::get('referral-awards', 'ReferralAwardController@index')->middleware(['permission:view_referral_award']);
     Route::get('referral-awards/user_search', 'ReferralAwardController@referralAwardUserSearch');
     Route::get('referral-awards/csv', 'ReferralAwardController@referralAwardCsv');
@@ -442,14 +437,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['gue
 });
 
 // Unauthenticated User
-Route::group(['middleware' => ['no_auth:users', 'locale']], function ()
-{
+Route::group(['middleware' => ['no_auth:users', 'locale']], function () {
     Route::get('/login', 'Auth\LoginController@index')->name("login");
 
     Route::get('/otp-verification', 'Auth\LoginController@otpVerification')->name("otpVerification");
     Route::post('/verifyOtp', 'Auth\LoginController@verifyOtp');
     Route::post('/resendOtp', 'Auth\LoginController@resendOtp');
-    
+
     Route::post('/authenticate', 'Auth\LoginController@authenticate');
     Route::get('register', 'Auth\RegisterController@create');
     Route::post('register/duplicate-phone-number-check', 'Auth\RegisterController@registerDuplicatePhoneNumberCheck');
@@ -462,8 +456,7 @@ Route::group(['middleware' => ['no_auth:users', 'locale']], function ()
 });
 
 //2fa
-Route::group(['middleware' => ['guest:users', 'locale', 'check-user-inactive'], 'namespace' => 'Users'], function ()
-{
+Route::group(['middleware' => ['guest:users', 'locale', 'check-user-inactive'], 'namespace' => 'Users'], function () {
     Route::get('2fa', 'CustomerController@view2fa');
     Route::post('2fa/verify', 'CustomerController@verify2fa');
     Route::get('google2fa', 'CustomerController@viewGoogle2fa')->name('google2fa');
@@ -472,8 +465,7 @@ Route::group(['middleware' => ['guest:users', 'locale', 'check-user-inactive'], 
 });
 
 // Authenticated User
-Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-inactive'], 'namespace' => 'Users'], function ()
-{
+Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-inactive'], 'namespace' => 'Users'], function () {
     Route::get('dashboard', 'CustomerController@dashboard');
 
     // Route for redirecting to crypto preference disabled page
@@ -487,8 +479,7 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     Route::get('/refer-friend', 'ReferralController@referFriend');
 
     //Settings
-    Route::group(['middleware' => ['permission:manage_setting']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_setting']], function () {
         Route::get('profile', 'CustomerController@profile');
         Route::get('profile/2fa', 'CustomerController@profileTwoFa');
         Route::post('profile/2fa/update', 'CustomerController@UpdateProfileTwoFa');
@@ -529,14 +520,12 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     // Deposit - Without Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_deposit']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_deposit']], function () {
         Route::get('deposit-money/print/{id}', 'DepositController@depositPrintPdf');
     });
 
     // Deposit - With Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_deposit', 'check-user-suspended']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_deposit', 'check-user-suspended']], function () {
         Route::match(array('GET', 'POST'), 'deposit', 'DepositController@create');
         Route::post('deposit/getDepositFeesLimit', 'DepositController@getDepositFeesLimit');
         Route::post('deposit/fees-limit-currency-payment-methods-is-active-payment-methods-list', 'DepositController@getDepositMatchedFeesLimitsCurrencyPaymentMethodsSettingsPaymentMethods');
@@ -588,16 +577,14 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     // Withdrawal - Without Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_withdrawal']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_withdrawal']], function () {
         Route::get('payouts', 'WithdrawalController@payouts');
         Route::get('payout/setting', 'WithdrawalController@payoutSetting');
         Route::get('withdrawal-money/print/{id}', 'WithdrawalController@withdrawalPrintPdf');
     });
 
     // Withdrawal - With Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_withdrawal', 'check-user-suspended']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_withdrawal', 'check-user-suspended']], function () {
         Route::post('payout/setting/store', 'WithdrawalController@payoutSettingStore');
         Route::post('payout/setting/update', 'WithdrawalController@payoutSettingUpdate');
         Route::post('payout/setting/delete', 'WithdrawalController@payoutSettingDestroy');
@@ -610,14 +597,12 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     //Transfer - Without Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_transfer']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_transfer']], function () {
         Route::get('moneytransfer/print/{id}', 'MoneyTransferController@transferPrintPdf');
     });
 
     //Transfer - With Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_transfer', 'check-user-suspended']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_transfer', 'check-user-suspended']], function () {
         Route::match('GET', 'moneytransfer', 'MoneyTransferController@create');
         Route::post('transfer', 'MoneyTransferController@create');
         Route::post('transfer-user-email-phone-receiver-status-validate', 'MoneyTransferController@transferUserEmailPhoneReceiverStatusValidate');
@@ -626,11 +611,10 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     // transactions
-    Route::group(['middleware' => ['permission:manage_transaction']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_transaction']], function () {
         Route::match(array('GET', 'POST'), 'transactions', 'UserTransactionController@index');
         Route::get('transactions/{id}', 'UserTransactionController@showDetails');
-        Route::post('get_transaction', 'UserTransactionController@getTransaction');
+        Route::get('get_transaction', 'UserTransactionController@getTransaction');
         Route::get('transactions/print/{id}', 'UserTransactionController@getTransactionPrintPdf');
         Route::get('transactions/exchangeTransactionPrintPdf/{id}', 'UserTransactionController@exchangeTransactionPrintPdf');
         Route::get('transactions/merchant-payment-print/{id}', 'UserTransactionController@merchantPaymentTransactionPrintPdf');
@@ -639,14 +623,12 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     // Currency Exchange - Without Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_exchange']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_exchange']], function () {
         Route::get('exchange-money/print/{id}', 'ExchangeController@exchangeOfPrintPdf');
     });
 
     // Currency Exchange - With Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_exchange', 'check-user-suspended']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_exchange', 'check-user-suspended']], function () {
         Route::get('exchange', 'ExchangeController@exchange');
         Route::post('exchange-of-money', 'ExchangeController@exchangeOfCurrency');
         Route::post('exchange/get-currencies-except-users-existing-wallets', 'ExchangeController@getActiveHasTransactionExceptUsersExistingWalletsCurrencies');
@@ -657,8 +639,7 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     // Voucher
-    Route::group(['middleware' => ['permission:manage_voucher']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_voucher']], function () {
         Route::match(array('GET', 'POST'), 'vouchers', 'VoucherController@index');
         Route::get('voucher/add', 'VoucherController@add');
         Route::post('voucher/store', 'VoucherController@store');
@@ -670,18 +651,16 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
         Route::post('voucher/update-voucher-activation-qr-code', 'VoucherController@updateVoucherActivationQrCode');
         Route::get('voucher/qr-code-print/{id}/{printQrCode}', 'VoucherController@printVoucherQrCode');
     });
-    
+
     // Request Payments - Without Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_request_payment']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_request_payment']], function () {
         Route::get('request-payment/print/{id}', 'RequestPaymentController@printPdf');
         Route::post('request_payment/cancel', 'RequestPaymentController@cancel');
         Route::post('request_payment/cancelfrom', 'RequestPaymentController@cancelfrom');
     });
 
     // Request Payments - With Suspend Middleware
-    Route::group(['middleware' => ['permission:manage_request_payment', 'check-user-suspended']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_request_payment', 'check-user-suspended']], function () {
         Route::get('request_payment/check-creator-status', 'RequestPaymentController@checkReqCreatorStatus');
         Route::get('request_payment/add', 'RequestPaymentController@add');
         Route::post('request', 'RequestPaymentController@store');
@@ -694,8 +673,7 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     // Merchants
-    Route::group(['middleware' => ['permission:manage_merchant']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_merchant']], function () {
         Route::get('merchants', 'MerchantController@index');
         // QR Code - starts
         Route::post('merchant/generate-standard-merchant-payment-qrCode', 'MerchantController@generateStandardMerchantPaymentQrCode');
@@ -712,8 +690,7 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     // Disputes
-    Route::group(['middleware' => ['permission:manage_dispute']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_dispute']], function () {
         Route::get('disputes', 'DisputeController@index');
         Route::get('dispute/add/{id}', 'DisputeController@add');
         Route::post('dispute/open', 'DisputeController@store');
@@ -723,8 +700,7 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     // Tickets
-    Route::group(['middleware' => ['permission:manage_ticket']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_ticket']], function () {
         Route::get('tickets', 'TicketController@index');
         Route::get('ticket/add', 'TicketController@create');
         Route::post('ticket/store', 'TicketController@store');
@@ -734,8 +710,7 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     //Crypt Send/Transfer/Withdraw - With check enabled cryto preference and suspend middleware
-    Route::group(['middleware' => ['check-enabled-currencies-preference','check-user-suspended']], function ()
-    {
+    Route::group(['middleware' => ['check-enabled-currencies-preference', 'check-user-suspended']], function () {
         Route::get('crpto/send/{walletCurrencyCode}/{walletId}', 'CryptoSendController@sendCryptoCreate');
         Route::get('crpto/send/validate-address', 'CryptoSendController@validateCryptoAddress');
         Route::get('crpto/send/validate-user-balance', 'CryptoSendController@validateUserBalanceAgainstAmount');
@@ -743,23 +718,21 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
         Route::get('crpto/send/success', 'CryptoSendController@sendCryptoSuccess');
     });
 
-     // Manage Store
-    Route::group(['middleware' => ['permission:manage_store']], function ()
-    {
+    // Manage Store
+    Route::group(['middleware' => ['permission:manage_store']], function () {
         Route::get('stores', 'StoreController@index');
         Route::get('stores/add', 'StoreController@add');
         Route::post('stores/store', 'StoreController@store');
         Route::get('stores/edit/{id}', 'StoreController@edit');
         Route::post('stores/update/{id}', 'StoreController@update');
         // Route::post('stores/delete', 'StoreController@destroy');
-        Route::post('/stores/store-code-check','StoreController@checkStoreCode');
-        Route::post('/stores/update-store-code-check','StoreController@updateStoreCodeCheck');
-        Route::post('/stores/delete-store-photo','StoreController@deleteStorePhoto');
+        Route::post('/stores/store-code-check', 'StoreController@checkStoreCode');
+        Route::post('/stores/update-store-code-check', 'StoreController@updateStoreCodeCheck');
+        Route::post('/stores/delete-store-photo', 'StoreController@deleteStorePhoto');
     });
 
     // Manage Product Category
-    Route::group(['middleware' => ['permission:manage_product_category']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_product_category']], function () {
         Route::get('product-categories', 'ProductCategoryController@index');
         Route::get('product-categories/add', 'ProductCategoryController@add');
         Route::post('product-categories/store', 'ProductCategoryController@store');
@@ -770,8 +743,7 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     });
 
     // Manage Product
-    Route::group(['middleware' => ['permission:manage_product']], function ()
-    {
+    Route::group(['middleware' => ['permission:manage_product']], function () {
         Route::get('products', 'ProductController@index');
         Route::get('products/add', 'ProductController@add');
         Route::post('products/store', 'ProductController@store');
@@ -793,10 +765,8 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
     Route::get('order-product/print/{id}', 'OrderController@orderProductPrintPdf');
     Route::get('order-received/print/{id}', 'OrderController@orderReceivedPrintPdf');
 
-
     //Crypt Receive - With check enabled cryto preference and suspend middleware
-    Route::group(['middleware' => ['check-enabled-currencies-preference','check-user-suspended']], function ()
-    {
+    Route::group(['middleware' => ['check-enabled-currencies-preference', 'check-user-suspended']], function () {
         Route::get('crpto/receive/{walletCurrencyCode}/{walletId}', 'CryptoReceiveController@receiveCryptoCreate');
     });
 });
@@ -834,8 +804,7 @@ Route::post('merchant/api/transaction-info', 'MerchantApiPayment@storeTransactio
 Route::get('merchant/payment/cancel', 'MerchantApiPayment@cancelPayment');
 /* PayMoney Merchant API End*/
 
-Route::group(['middleware' => ['guest:users']], function ()
-{
+Route::group(['middleware' => ['guest:users']], function () {
     Route::get('merchant/payment/confirm', 'MerchantApiPayment@confirmPayment');
 });
 

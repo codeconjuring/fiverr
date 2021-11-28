@@ -21,7 +21,7 @@
                             @if($transactions->count()>0)
                                 @foreach($transactions as $key=>$transaction)
                                     <div class="accordion__item border-bottom mb-0">
-                                        <div class="d-flex flex-wrap align-items-center accordion__header collapsed rounded" data-toggle="collapse" data-target="#default_collapseOne1">
+                                        <div class="d-flex flex-wrap align-items-center accordion__header collapsed rounded show_area"  trans-id="{{$transaction->id}}" id="{{$key}}" data-toggle="collapse" data-target="#default_collapseOne{{ $key }}">
                                         <div class="mb-lg-0 mb-3 d-flex align-items-center">
                                             <div class="profile-image mr-4"> <img src="public/images/avatar/10.png" alt="" width="63" class="rounded-circle"> <span class="bg-success">
                                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -218,8 +218,9 @@
                                         <span class="accordion__header--indicator"></span>
                                     </div>
 
-                                        <div id="default_collapseOne1" class="collapse accordion__body" data-parent="#accordion-one">
-                                        <div class="d-flex flex-wrap align-items-center accordion__body--text p-0">
+                                        <div id="default_collapseOne{{ $key }}" class="collapse accordion__body" data-parent="#accordion-one">
+                                            <div class="col-md-7 col-sm-12 text-left" id="html_{{$key}}"></div>
+                                        {{-- <div class="d-flex flex-wrap align-items-center accordion__body--text p-0">
                                             <div class="mr-3 mb-3">
                                             <p class="fs-12 mb-2">ID Payment</p>
                                             <span class="text-black font-w500">#00123521kkkkkkkkkk</span> </div>
@@ -244,7 +245,7 @@
                                             <p class="mb-0 fs-14">Lorem ipsum dolor sit<br>
                                                 amet, consectetur </p>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         </div>
                                     </div>
 
@@ -384,6 +385,7 @@
                                     <a href="#"><i class="fa fa-caret-down" aria-hidden="true"></i></a>
                                 </div>
                             </div>
+
                         @endforeach
                         @else
                             @lang('message.dashboard.right-table.no-wallet')
@@ -394,9 +396,18 @@
                 </div>
                 </div>
 
+
+
     </div>
     </div>
 </div>
+
+@endsection
+
+
+@section('js')
+
+@include('common.new-user-transactions-scripts')
 
 @endsection
 

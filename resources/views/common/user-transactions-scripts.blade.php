@@ -28,6 +28,8 @@ function checkRequestCreatorStatus()
 
 $(document).on('click', '.show_area', function (e)
 {
+
+
     e.preventDefault();
 
     var trans_id = $(this).attr('trans-id');

@@ -19,606 +19,643 @@
 @endsection
 
 @section('content')
-    <section class="section-06 history padding-30">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-xs-12 mb20 marginTopPlus">
-                    @include('user_dashboard.layouts.common.alert')
 
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    @if (session('warning'))
-                        <div class="alert alert-warning">
-                            {{ session('warning') }}
-                        </div>
-                    @endif
 
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="chart-list float-left">
-                                <ul>
-                                    <li class="active"><a href="{{url('/profile')}}">@lang('message.dashboard.setting.title')</a></li>
-                                    @if ($two_step_verification != 'disabled')
-                                        <li><a href="{{url('/profile/2fa')}}">@lang('message.2sa.title-short-text')</a></li>
-                                    @endif
-                                    <li><a href="{{url('/profile/personal-id')}}">@lang('message.personal-id.title')
-                                        @if( !empty(getAuthUserIdentity()) && getAuthUserIdentity()->status == 'approved' )(<span style="color: green"><i class="fa fa-check" aria-hidden="true"></i>Verified</span>) @endif
-                                        </a>
-                                    </li>
-                                    <li><a href="{{url('/profile/personal-address')}}">@lang('message.personal-address.title')
-                                        @if( !empty(getAuthUserAddress()) && getAuthUserAddress()->status == 'approved' )(<span style="color: green"><i class="fa fa-check" aria-hidden="true"></i>Verified</span>) @endif
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+<div class="content-body" style="min-height: 1100px;">
+<div class="container-fluid">
+  <div class="page-titles">
+    <h4>Profile</h4>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:void(0)">App</a></li>
+      <li class="breadcrumb-item active"><a href="javascript:void(0)">Profile</a></li>
+    </ol>
+  </div>
+  <div class="row">
 
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            @if(!empty(Auth::user()->picture))
-                                                <img src="{{url('public/user_dashboard/profile/'.Auth::user()->picture)}}"
-                                                     class="rounded-circle rounded-circle-custom-trans"
-                                                     id="profileImage">
-                                            @else
-                                                <img src="{{url('public/user_dashboard/images/avatar.jpg')}}"
-                                                     class="rounded-circle rounded-circle-custom-trans"
-                                                     id="profileImage">
+    <div class="col-xl-12">
 
+
+                            @include('user_dashboard.layouts.common.alert')
+
+                            @if (session('status'))
+                                <div class="alert alert-success">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+                            @if (session('warning'))
+                                <div class="alert alert-warning">
+                                    {{ session('warning') }}
+                                </div>
+                            @endif
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="profile-tab" style="width: 100%">
+                                        <div class="custom-tab-1">
+                                        {{-- <ul>
+                                            <li class="active"><a href="{{url('/profile')}}">@lang('message.dashboard.setting.title')</a></li>
+                                            @if ($two_step_verification != 'disabled')
+                                                <li><a href="{{url('/profile/2fa')}}">@lang('message.2sa.title-short-text')</a></li>
                                             @endif
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h4>@lang('message.dashboard.setting.change-avatar')</h4>
-                                            <p>@lang('message.dashboard.setting.change-avatar-here')</p>
-                                            <strong style="font-size: 12px !important;">*{{__('Recommended Dimension')}}: 100 px * 100 px</strong>
-
-                                            <input type="file" id="file" style="display: none"/>
-                                            <input type="hidden" id="file_name"/>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="uploadAvatar">
-                                                <a href="javascript:changeProfile()" id="changePicture"
-                                                   class="btn btn-secondary btn-border btn-sm"
-                                                   style="margin-top: 10px;">
-                                                    <i class="fa fa-camera" aria-hidden="true"></i>
-                                                    &nbsp; @lang('message.dashboard.button.change-picture')
+                                            <li><a href="{{url('/profile/personal-id')}}">@lang('message.personal-id.title')
+                                                @if( !empty(getAuthUserIdentity()) && getAuthUserIdentity()->status == 'approved' )(<span style="color: green"><i class="fa fa-check" aria-hidden="true"></i>Verified</span>) @endif
                                                 </a>
-                                                <span id="file-error" style="display: none;"></span>
-                                            </div>
+                                            </li>
+                                            <li><a href="{{url('/profile/personal-address')}}">@lang('message.personal-address.title')
+                                                @if( !empty(getAuthUserAddress()) && getAuthUserAddress()->status == 'approved' )(<span style="color: green"><i class="fa fa-check" aria-hidden="true"></i>Verified</span>) @endif
+                                                </a>
+                                            </li>
+                                        </ul> --}}
+                                        <ul class="nav nav-tabs">
+                                            <li class="nav-item"><a href="{{url('/profile')}}"  class="nav-link active show">@lang('message.dashboard.setting.title')</a> </li>
+                                            @if ($two_step_verification != 'disabled')
+                                                <li><a href="{{url('/profile/2fa')}}">@lang('message.2sa.title-short-text')</a></li>
+                                            @endif
+                                            <li class="nav-item">
+                                                <a href="{{url('/profile/personal-id')}}"  class="nav-link">@lang('message.personal-id.title')
+                                                    @if( !empty(getAuthUserIdentity()) && getAuthUserIdentity()->status == 'approved' )(<span style="color: green"><i class="fa fa-check" aria-hidden="true"></i>Verified</span>) @endif
+                                                </a>
 
-                                        </div>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="{{url('/profile/personal-address')}}"  class="nav-link">@lang('message.personal-address.title')
+                                                    @if( !empty(getAuthUserAddress()) && getAuthUserAddress()->status == 'approved' )(<span style="color: green"><i class="fa fa-check" aria-hidden="true"></i>Verified</span>) @endif
+                                                </a>
+                                            </li>
+                                          </ul>
                                     </div>
+                                    </div>
+
                                 </div>
-                                <div class="col-md-6">
+                                <div class="card-body">
                                     <div class="row">
-                                        {{-- <div class="col-md-2">
-                                            <img src="{{url('public/user_dashboard/images/password-icon.png')}}" class="rounded-circle rounded-circle-custom-trans">
-                                        </div> --}}
                                         <div class="col-md-6">
-                                            <h4>@lang('message.dashboard.setting.change-password')</h4>
-                                            <p>@lang('message.dashboard.setting.change-password-here')</p>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button type="button" class="btn btn-cust" data-toggle="modal"
-                                                    data-target="#myModal">
-                                                @lang('message.dashboard.button.change-password')
-                                            </button>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    @if(!empty(Auth::user()->picture))
+                                                        <img src="{{url('public/user_dashboard/profile/'.Auth::user()->picture)}}"
+                                                             class="rounded-circle rounded-circle-custom-trans"
+                                                             id="profileImage">
+                                                    @else
+                                                        <img src="{{url('public/user_dashboard/images/avatar.jpg')}}"
+                                                             class="rounded-circle rounded-circle-custom-trans"
+                                                             id="profileImage">
 
-                                            <!-- The Modal -->
-                                            <div class="modal" id="myModal">
-                                                <div class="modal-dialog">
-                                                    <form method="post" action="{{url('prifile/update_password')}}" id="reset_password">
-                                                        {{ csrf_field() }}
-
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">@lang('message.dashboard.setting.change-password')</h4>
-                                                                <button type="button" class="close"
-                                                                        data-dismiss="modal">&times;</button>
-                                                            </div>
-                                                            <div class="modal-body">
-
-                                                                <div class="form-group">
-                                                                    <label>@lang('message.dashboard.setting.old-password')</label>
-                                                                    <input class="form-control" name="old_password"
-                                                                           id="old_password" type="password">
-                                                                    @if($errors->has('old_password'))
-                                                                        <span class="error">
-                                                                         {{ $errors->first('old_password') }}
-                                                                        </span>
-                                                                    @endif
-                                                                </div>
-                                                                <div class="clearfix"></div>
-
-                                                                <div class="form-group">
-                                                                    <label>@lang('message.dashboard.setting.new-password')</label>
-                                                                    <input class="form-control" name="password"
-                                                                           id="password" type="password">
-                                                                    @if($errors->has('password'))
-                                                                        <span class="error">
-                                                                         {{ $errors->first('password') }}
-                                                                        </span>
-                                                                    @endif
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                                <div class="form-group">
-                                                                    <label>@lang('message.dashboard.setting.confirm-password')</label>
-                                                                    <input class="form-control" name="confirm_password"
-                                                                           id="confirm_password" type="password">
-                                                                    @if($errors->has('confirm_password'))
-                                                                        <span class="error">
-                                                                         {{ $errors->first('confirm_password') }}
-                                                                        </span>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- Modal footer -->
-                                                            <div class="modal-footer">
-                                                                <div class="row">
-                                                                    <div class="col-md-6">
-                                                                        <button type="button" class="btn btn-cust" data-dismiss="modal">@lang('message.form.close')</button>
-                                                                    </div>
-
-                                                                    <div class="col-md-6">
-                                                                        <button type="submit" class="btn btn-cust">@lang('message.dashboard.button.submit')</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </form>
+                                                    @endif
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
+                                                <div class="col-md-6">
+                                                    <h4>@lang('message.dashboard.setting.change-avatar')</h4>
+                                                    <p>@lang('message.dashboard.setting.change-avatar-here')</p>
+                                                    <strong style="font-size: 12px !important;">*{{__('Recommended Dimension')}}: 100 px * 100 px</strong>
 
-                            @if (empty($user->phone))
-                                <div class="row">
-                                    <div class="col-md-6">
-
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <img src="{{ url('public/user_dashboard/images/phone-icon.png') }}" class="rounded-circle rounded-circle-custom-trans">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h4 class="addPhoneTitle">@lang('message.dashboard.setting.add-phone')</h4>
-                                                <p class="addPhoneBody">@lang('message.dashboard.setting.add-phone-subhead1') <b>+</b> @lang('message.dashboard.setting.add-phone-subhead2')</p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="uploadAvatar">
-                                                    <button type="button" class="btn btn-secondary btn-border btn-sm add" data-toggle="modal" data-target="#add" style="margin-top: 10px;">
-                                                        <i class="fa fa-plus" id="modalTextSymbol"></i>
-                                                        <span class="modalText">&nbsp; @lang('message.dashboard.setting.add-phone')</span>
-                                                    </button>
+                                                    <input type="file" id="file" style="display: none"/>
+                                                    <input type="hidden" id="file_name"/>
                                                 </div>
-
-                                                <!-- Add Phone Modal -->
-                                                <div class="modal" id="add">
-                                                    <div class="modal-dialog">
-
-                                                        <form method="POST" action="{{ url('profile/complete-phone-verification')}}" id="complete-phone-verification">
-                                                            {{ csrf_field() }}
-                                                            <input type="hidden" value="{{ $is_sms_env_enabled }}" name="is_sms_env_enabled" id="is_sms_env_enabled" />
-                                                            <input type="hidden" value="{{ $checkPhoneVerification }}" name="checkPhoneVerification" id="checkPhoneVerification" />
-
-                                                            <input type="hidden" value="{{ $user->id }}" name="user_id" id="user_id" />
-                                                            <input type="hidden" name="hasVerificationCode" id="hasVerificationCode" />
-
-                                                            <input type="hidden" name="defaultCountry" id="defaultCountry" class="form-control">
-                                                            <input type="hidden" name="carrierCode" id="carrierCode" class="form-control">
-                                                            <input type="hidden" name="countryName" id="countryName" class="form-control">
-
-
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h4 class="modal-title">@lang('message.dashboard.setting.add-phone')</h4>
-                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                </div>
-
-                                                                <div class="modal-body">
-
-                                                                    <div class="alert text-center" id="message" style="display: none"></div>
-
-                                                                    <div class="form-group">
-                                                                        <label id="subheader_text">@lang('message.dashboard.setting.add-phone-subheadertext')</label>
-                                                                        <br>
-                                                                        <div class="phone_group">
-                                                                            <input type="tel" class="form-control" id="phone" name="phone">
-                                                                        </div>
-                                                                        <span id="phone-number-error"></span>
-                                                                        <span id="tel-number-error"></span>
-
-                                                                    </div>
-                                                                    <div class="clearfix"></div>
-
-                                                                    <div class="form-group">
-                                                                        <label></label>
-                                                                        <input id="phone_verification_code" type="text" maxlength="6" class="form-control" name="phone_verification_code"
-                                                                        style="display: none;width: 46%;">
-                                                                    </div>
-                                                                    <div class="clearfix"></div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-md-5">
-                                                                            <div style="margin-top: 6px;">
-                                                                                <span id="static_phone_show" class="static_phone_show" style="display: none;"></span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-2">
-                                                                            <button type="button" class="btn btn-sm btn-cust edit" style="display: none;"><i class="fa fa-edit"></i></button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <!-- Modal footer -->
-                                                                <div class="modal-footer">
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <button type="button" class="btn btn-cust" data-dismiss="modal" id="close">@lang('message.form.cancel')</button>
-                                                                        </div>
-
-                                                                        <div class="col-md-6">
-                                                                            <button type="button" class="btn btn-cust next" id="common_button">@lang('message.dashboard.button.next')</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
+                                                <div class="col-md-4">
+                                                    <div class="uploadAvatar">
+                                                        <a href="javascript:changeProfile()" id="changePicture"
+                                                           class="btn btn-primary mb-1"
+                                                           style="margin-top: 10px;">
+                                                            <i class="fa fa-camera" aria-hidden="true"></i>
+                                                            &nbsp; @lang('message.dashboard.button.change-picture')
+                                                        </a>
+                                                        <span id="file-error" style="display: none;"></span>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                  {{-- @if (!empty($QrCodeSecret)) --}}
-                                  <div class="col-md-6">
-                                    <div class="row">
                                         <div class="col-md-6">
-                                            <div class="preloader" style="display: none;">
-                                                <div class="preloader-img"></div>
-                                            </div>
-                                            <div class="user-profile-qr-code">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button type="button" class="btn btn-cust" id="qr-code-btn">
-                                            </button>
-                                            <br>
-                                            <br>
-                                            <a href="#" class="btn btn-cust mr-auto" id="print-qr-code-btn" style="display: none;width: 158px;">
-                                                <strong>
-                                                    Print QR Code
-                                                </strong>
-                                            </a>
-                                            <!-- The Modal -->
-                                        </div>
-                                    </div>
-                                </div>
-                            {{-- @endif --}}
-                                </div>
-                                <hr>
-                            @else
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <img src="{{ url('public/user_dashboard/images/phone-icon.png') }}" class="rounded-circle rounded-circle-custom-trans">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h4 class="editPhoneTitle">@lang('message.dashboard.setting.phone-number')</h4>
-                                                <p class="editPhoneBody">{{ auth()->user()->phone }}</p>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="uploadAvatar">
-                                                    <button type="button" class="btn btn-secondary btn-border btn-sm editModal" data-toggle="modal" data-target="#editModal" style="margin-top: 10px;">
-                                                        <i class="fa fa-edit"></i>
-                                                        <span>&nbsp; @lang('message.dashboard.setting.edit-phone')</span>
+                                            <div class="row">
+                                                {{-- <div class="col-md-2">
+                                                    <img src="{{url('public/user_dashboard/images/password-icon.png')}}" class="rounded-circle rounded-circle-custom-trans">
+                                                </div> --}}
+                                                <div class="col-md-6">
+                                                    <h4>@lang('message.dashboard.setting.change-password')</h4>
+                                                    <p>@lang('message.dashboard.setting.change-password-here')</p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button type="button" class="btn btn-primary mb-1" data-toggle="modal"
+                                                            data-target="#myModal">
+                                                        @lang('message.dashboard.button.change-password')
                                                     </button>
 
-                                                </div>
-                                                <!-- The Modal -->
-                                                <div class="modal" id="editModal">
-                                                    <div class="modal-dialog">
+                                                    <!-- The Modal -->
+                                                    <div class="modal" id="myModal">
+                                                        <div class="modal-dialog">
+                                                            <form method="post" action="{{url('prifile/update_password')}}" id="reset_password">
+                                                                {{ csrf_field() }}
 
-                                                        <form method="POST" action="{{ url('profile/update-phone-number')}}" id="update-phone-number">
-                                                            {{ csrf_field() }}
-                                                            <input type="hidden" value="{{ $is_sms_env_enabled }}" name="is_sms_env_enabled" id="is_sms_env_enabled">
-                                                            <input type="hidden" value="{{ $user->id }}" name="user_id" id="user_id">
-
-                                                            <input type="hidden" value="{{ $checkPhoneVerification }}" name="editCheckPhoneVerification" id="editCheckPhoneVerification" />
-                                                            <input type="hidden" name="editHasVerificationCode" id="editHasVerificationCode" />
-
-                                                            <input type="hidden" name="edit_defaultCountry" id="edit_defaultCountry" value="{{ $user->defaultCountry }}">
-                                                            <input type="hidden" name="edit_carrierCode" id="edit_carrierCode" value="{{ $user->carrierCode }}">
-
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h4 class="modal-title">@lang('message.dashboard.setting.edit-phone')</h4>
-                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                </div>
-
-                                                                <div class="modal-body editModalBody">
-                                                                    <div class="alert text-center" id="message" style="display: none"></div>
-
-                                                                    <div class="form-group">
-                                                                        <label id="subheader_edit_text">@lang('message.dashboard.setting.add-phone-subheadertext')</label>
-                                                                        <br>
-                                                                        <div class="phone_group">
-                                                                            <input type="tel" class="form-control" id="edit_phone" name="edit_phone" value="{{ '+'.$user->carrierCode.$user->phone }}">
-                                                                        </div>
-                                                                        <span id="edit-phone-number-error"></span>
-                                                                        <span id="edit-tel-number-error"></span>
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">@lang('message.dashboard.setting.change-password')</h4>
+                                                                        <button type="button" class="close"
+                                                                                data-dismiss="modal">&times;</button>
                                                                     </div>
-                                                                    <div class="clearfix"></div>
+                                                                    <div class="modal-body">
 
-                                                                    <div class="form-group">
-                                                                        <label></label>
-                                                                        <input id="edit_phone_verification_code" type="text" maxlength="6" class="form-control" name="edit_phone_verification_code"
-                                                                        style="display: none;width: 46%;">
-                                                                    </div>
-                                                                    <div class="clearfix"></div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-md-5">
-                                                                            <div style="margin-top: 6px;">
-                                                                                <span id="edit_static_phone_show" class="edit_static_phone_show" style="display: none;"></span>
-                                                                            </div>
+                                                                        <div class="form-group">
+                                                                            <label>@lang('message.dashboard.setting.old-password')</label>
+                                                                            <input class="form-control" name="old_password"
+                                                                                   id="old_password" type="password">
+                                                                            @if($errors->has('old_password'))
+                                                                                <span class="error">
+                                                                                 {{ $errors->first('old_password') }}
+                                                                                </span>
+                                                                            @endif
                                                                         </div>
-                                                                        <div class="col-md-2">
-                                                                            <button type="button" class="btn btn-sm btn-cust edit_button_edit" style="display: none;"><i class="fa fa-edit"></i></button>
+                                                                        <div class="clearfix"></div>
+
+                                                                        <div class="form-group">
+                                                                            <label>@lang('message.dashboard.setting.new-password')</label>
+                                                                            <input class="form-control" name="password"
+                                                                                   id="password" type="password">
+                                                                            @if($errors->has('password'))
+                                                                                <span class="error">
+                                                                                 {{ $errors->first('password') }}
+                                                                                </span>
+                                                                            @endif
                                                                         </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <!-- Modal footer -->
-                                                                <div class="modal-footer">
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <button type="button" class="btn btn-cust" data-dismiss="modal" id="close">@lang('message.form.cancel')</button>
-                                                                        </div>
-
-                                                                        <div class="col-md-6">
-
-                                                                            @php
-                                                                                $bothDisabled = ($is_sms_env_enabled == false && $checkPhoneVerification == "Disabled");
-                                                                            @endphp
-
-                                                                            @if ($bothDisabled || $checkPhoneVerification == "Disabled")
-                                                                                <button type="button" class="btn btn-cust edit_form_submit" id="common_button_update">@lang('message.form.update')</button>
-                                                                            @else
-                                                                                <button type="button" class="btn btn-cust update" id="common_button_update">@lang('message.dashboard.button.next')</button>
+                                                                        <div class="clearfix"></div>
+                                                                        <div class="form-group">
+                                                                            <label>@lang('message.dashboard.setting.confirm-password')</label>
+                                                                            <input class="form-control" name="confirm_password"
+                                                                                   id="confirm_password" type="password">
+                                                                            @if($errors->has('confirm_password'))
+                                                                                <span class="error">
+                                                                                 {{ $errors->first('confirm_password') }}
+                                                                                </span>
                                                                             @endif
                                                                         </div>
                                                                     </div>
+
+                                                                    <!-- Modal footer -->
+                                                                    <div class="modal-footer">
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <button type="button" class="btn btn-cust" data-dismiss="modal">@lang('message.form.close')</button>
+                                                                            </div>
+
+                                                                            <div class="col-md-6">
+                                                                                <button type="submit" class="btn btn-cust">@lang('message.dashboard.button.submit')</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
                                                                 </div>
-                                                            </div>
-                                                        </form>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
-                                    {{-- @if (!empty($QrCodeSecret)) --}}
-                                    <div class="col-md-6">
+                                    <hr>
+
+                                    @if (empty($user->phone))
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="preloader" style="display: none;">
-                                                    <div class="preloader-img"></div>
-                                                </div>
-                                                <div class="user-profile-qr-code">
+
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <img width="72px" src="{{ url('public/user_dashboard/images/phone-icon.png') }}" class="rounded-circle rounded-circle-custom-trans">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h4 class="addPhoneTitle">@lang('message.dashboard.setting.add-phone')</h4>
+                                                        <p class="addPhoneBody">@lang('message.dashboard.setting.add-phone-subhead1') <b>+</b> @lang('message.dashboard.setting.add-phone-subhead2')</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="uploadAvatar">
+                                                            <button type="button" class="btn btn-secondary btn-border btn-sm add" data-toggle="modal" data-target="#add" style="margin-top: 10px;">
+                                                                <i class="fa fa-plus" id="modalTextSymbol"></i>
+                                                                <span class="modalText">&nbsp; @lang('message.dashboard.setting.add-phone')</span>
+                                                            </button>
+                                                        </div>
+
+                                                        <!-- Add Phone Modal -->
+                                                        <div class="modal" id="add">
+                                                            <div class="modal-dialog">
+
+                                                                <form method="POST" action="{{ url('profile/complete-phone-verification')}}" id="complete-phone-verification">
+                                                                    {{ csrf_field() }}
+                                                                    <input type="hidden" value="{{ $is_sms_env_enabled }}" name="is_sms_env_enabled" id="is_sms_env_enabled" />
+                                                                    <input type="hidden" value="{{ $checkPhoneVerification }}" name="checkPhoneVerification" id="checkPhoneVerification" />
+
+                                                                    <input type="hidden" value="{{ $user->id }}" name="user_id" id="user_id" />
+                                                                    <input type="hidden" name="hasVerificationCode" id="hasVerificationCode" />
+
+                                                                    <input type="hidden" name="defaultCountry" id="defaultCountry" class="form-control">
+                                                                    <input type="hidden" name="carrierCode" id="carrierCode" class="form-control">
+                                                                    <input type="hidden" name="countryName" id="countryName" class="form-control">
+
+
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">@lang('message.dashboard.setting.add-phone')</h4>
+                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                        </div>
+
+                                                                        <div class="modal-body">
+
+                                                                            <div class="alert text-center" id="message" style="display: none"></div>
+
+                                                                            <div class="form-group">
+                                                                                <label id="subheader_text">@lang('message.dashboard.setting.add-phone-subheadertext')</label>
+                                                                                <br>
+                                                                                <div class="phone_group">
+                                                                                    <input type="tel" class="form-control" id="phone" name="phone">
+                                                                                </div>
+                                                                                <span id="phone-number-error"></span>
+                                                                                <span id="tel-number-error"></span>
+
+                                                                            </div>
+                                                                            <div class="clearfix"></div>
+
+                                                                            <div class="form-group">
+                                                                                <label></label>
+                                                                                <input id="phone_verification_code" type="text" maxlength="6" class="form-control" name="phone_verification_code"
+                                                                                style="display: none;width: 46%;">
+                                                                            </div>
+                                                                            <div class="clearfix"></div>
+
+                                                                            <div class="row">
+                                                                                <div class="col-md-5">
+                                                                                    <div style="margin-top: 6px;">
+                                                                                        <span id="static_phone_show" class="static_phone_show" style="display: none;"></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-2">
+                                                                                    <button type="button" class="btn btn-sm btn-cust edit" style="display: none;"><i class="fa fa-edit"></i></button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Modal footer -->
+                                                                        <div class="modal-footer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <button type="button" class="btn btn-cust" data-dismiss="modal" id="close">@lang('message.form.cancel')</button>
+                                                                                </div>
+
+                                                                                <div class="col-md-6">
+                                                                                    <button type="button" class="btn btn-cust next" id="common_button">@lang('message.dashboard.button.next')</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <button type="button" class="btn btn-cust update-qr-code" id="qr-code-btn">
-                                                    @lang('message.dashboard.button.update-qr-code')
-                                                </button>
-                                                <br>
-                                                <br>
-                                                <a href="#" class="btn btn-cust mr-auto" id="print-qr-code-btn" style="display: none;width: 158px;">
-                                                    <strong>
-                                                        Print QR Code
-                                                    </strong>
-                                                </a>
-                                                <!-- The Modal -->
+                                          {{-- @if (!empty($QrCodeSecret)) --}}
+                                          <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="preloader" style="display: none;">
+                                                        <div class="preloader-img"></div>
+                                                    </div>
+                                                    <div class="user-profile-qr-code">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button type="button" class="btn btn-cust" id="qr-code-btn">
+                                                    </button>
+                                                    <br>
+                                                    <br>
+                                                    <a href="#" class="btn btn-cust mr-auto" id="print-qr-code-btn" style="display: none;width: 158px;">
+                                                        <strong>
+                                                            Print QR Code
+                                                        </strong>
+                                                    </a>
+                                                    <!-- The Modal -->
+                                                </div>
                                             </div>
                                         </div>
+                                    {{-- @endif --}}
+                                        </div>
+                                        <hr>
+                                    @else
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <img width="72px" src="{{ url('public/user_dashboard/images/phone-icon.png') }}" class="rounded-circle rounded-circle-custom-trans">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h4 class="editPhoneTitle">@lang('message.dashboard.setting.phone-number')</h4>
+                                                        <p class="editPhoneBody">{{ auth()->user()->phone }}</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="uploadAvatar">
+                                                            <button type="button" class="btn btn-primary mb-1 editModal" data-toggle="modal" data-target="#editModal" style="margin-top: 10px;">
+                                                                <i class="fa fa-edit"></i>
+                                                                <span>&nbsp; @lang('message.dashboard.setting.edit-phone')</span>
+                                                            </button>
+
+                                                        </div>
+                                                        <!-- The Modal -->
+                                                        <div class="modal" id="editModal">
+                                                            <div class="modal-dialog">
+
+                                                                <form method="POST" action="{{ url('profile/update-phone-number')}}" id="update-phone-number">
+                                                                    {{ csrf_field() }}
+                                                                    <input type="hidden" value="{{ $is_sms_env_enabled }}" name="is_sms_env_enabled" id="is_sms_env_enabled">
+                                                                    <input type="hidden" value="{{ $user->id }}" name="user_id" id="user_id">
+
+                                                                    <input type="hidden" value="{{ $checkPhoneVerification }}" name="editCheckPhoneVerification" id="editCheckPhoneVerification" />
+                                                                    <input type="hidden" name="editHasVerificationCode" id="editHasVerificationCode" />
+
+                                                                    <input type="hidden" name="edit_defaultCountry" id="edit_defaultCountry" value="{{ $user->defaultCountry }}">
+                                                                    <input type="hidden" name="edit_carrierCode" id="edit_carrierCode" value="{{ $user->carrierCode }}">
+
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">@lang('message.dashboard.setting.edit-phone')</h4>
+                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                        </div>
+
+                                                                        <div class="modal-body editModalBody">
+                                                                            <div class="alert text-center" id="message" style="display: none"></div>
+
+                                                                            <div class="form-group">
+                                                                                <label id="subheader_edit_text">@lang('message.dashboard.setting.add-phone-subheadertext')</label>
+                                                                                <br>
+                                                                                <div class="phone_group">
+                                                                                    <input type="tel" class="form-control" id="edit_phone" name="edit_phone" value="{{ '+'.$user->carrierCode.$user->phone }}">
+                                                                                </div>
+                                                                                <span id="edit-phone-number-error"></span>
+                                                                                <span id="edit-tel-number-error"></span>
+                                                                            </div>
+                                                                            <div class="clearfix"></div>
+
+                                                                            <div class="form-group">
+                                                                                <label></label>
+                                                                                <input id="edit_phone_verification_code" type="text" maxlength="6" class="form-control" name="edit_phone_verification_code"
+                                                                                style="display: none;width: 46%;">
+                                                                            </div>
+                                                                            <div class="clearfix"></div>
+
+                                                                            <div class="row">
+                                                                                <div class="col-md-5">
+                                                                                    <div style="margin-top: 6px;">
+                                                                                        <span id="edit_static_phone_show" class="edit_static_phone_show" style="display: none;"></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-2">
+                                                                                    <button type="button" class="btn btn-sm btn-cust edit_button_edit" style="display: none;"><i class="fa fa-edit"></i></button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Modal footer -->
+                                                                        <div class="modal-footer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <button type="button" class="btn btn-cust" data-dismiss="modal" id="close">@lang('message.form.cancel')</button>
+                                                                                </div>
+
+                                                                                <div class="col-md-6">
+
+                                                                                    @php
+                                                                                        $bothDisabled = ($is_sms_env_enabled == false && $checkPhoneVerification == "Disabled");
+                                                                                    @endphp
+
+                                                                                    @if ($bothDisabled || $checkPhoneVerification == "Disabled")
+                                                                                        <button type="button" class="btn btn-cust edit_form_submit" id="common_button_update">@lang('message.form.update')</button>
+                                                                                    @else
+                                                                                        <button type="button" class="btn btn-cust update" id="common_button_update">@lang('message.dashboard.button.next')</button>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            {{-- @if (!empty($QrCodeSecret)) --}}
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="preloader" style="display: none;">
+                                                            <div class="preloader-img"></div>
+                                                        </div>
+                                                        <div class="user-profile-qr-code">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-primary mb-1 update-qr-code" id="qr-code-btn">
+                                                            @lang('message.dashboard.button.update-qr-code')
+                                                        </button>
+                                                        <br>
+                                                        <br>
+                                                        <a href="#" class="btn btn-primary mb-1 mr-auto" id="print-qr-code-btn" style="display: none;width: 158px;">
+                                                            <strong>
+                                                                Print QR Code
+                                                            </strong>
+                                                        </a>
+                                                        <!-- The Modal -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {{-- @endif --}}
+                                        </div>
+                                        <hr>
+                                    @endif
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4>@lang('message.dashboard.setting.profile-information')</h4>
+                                            <hr>
+                                                <form method="post" action="{{url('prifile/update')}}" id="profile_update_form">
+                                                    {{csrf_field()}}
+
+                                                    <input type="hidden" value="{{$user->id}}" name="id" id="id" />
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="first_name">@lang('message.dashboard.setting.first-name')
+                                                                <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="first_name" id="first_name"
+                                                                   value="{{ $user->first_name }}">
+                                                            @if($errors->has('first_name'))
+                                                                <span class="error">
+                                                                   {{ $errors->first('first_name') }}
+                                                                  </span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="last_name">@lang('message.dashboard.setting.last-name')
+                                                                <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="last_name" id="last_name"
+                                                                   value="{{ $user->last_name }}">
+                                                            @if($errors->has('last_name'))
+                                                                <span class="error">
+                                                                   {{ $errors->first('last_name') }}
+                                                                  </span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="email">@lang('message.dashboard.setting.email')
+                                                                <span class="text-danger">*</span></label>
+                                                            <input type="text" id="email" class="form-control" value="{{ $user->email }}" readonly>
+                                                        </div>
+                                                        <!-- Default Wallet -->
+                                                        <div class="form-group col-md-6">
+                                                            <label for="email">@lang('message.dashboard.setting.default-wallet')
+                                                            </label>
+                                                            <select class="form-control" name="default_wallet" id="default_wallet">
+                                                                @foreach($wallets as $wallet)
+                                                                    <option value="{{$wallet->id}}" {{$wallet->is_default == 'Yes' ? 'Selected' : ''}}>{{$wallet->currency->code}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="address_1">@lang('message.dashboard.setting.address1')</label>
+                                                            <textarea class="form-control" name="address_1"
+                                                                      id="address_1">{{ $user->user_detail->address_1 }}</textarea>
+                                                            @if($errors->has('address_1'))
+                                                                <span class="error">
+                                                                   {{ $errors->first('address_1') }}
+                                                                  </span>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="form-group col-md-6">
+                                                            <label for="address_2">@lang('message.dashboard.setting.address2')</label>
+                                                            <textarea class="form-control" name="address_2"
+                                                                      id="address_2">{{ $user->user_detail->address_2 }}</textarea>
+                                                            @if($errors->has('address_2'))
+                                                                <span class="error">
+                                                                   {{ $errors->first('address_2') }}
+                                                                  </span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+
+
+                                                    {{-- <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="address_2">@lang('message.dashboard.setting.address2')</label>
+                                                            <textarea class="form-control" name="address_2"
+                                                                      id="address_2">{{ $user->user_detail->address_2 }}</textarea>
+                                                            @if($errors->has('address_2'))
+                                                                <span class="error">
+                                                                   {{ $errors->first('address_2') }}
+                                                                  </span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div> --}}
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="city">@lang('message.dashboard.setting.city')</label>
+
+                                                            <input type="text" class="form-control" name="city" id="city"
+                                                                   value="{{ $user->user_detail->city }}">
+                                                            @if($errors->has('city'))
+                                                                <span class="error">
+                                                                   {{ $errors->first('city') }}
+                                                                  </span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="state">@lang('message.dashboard.setting.state')</label>
+                                                            <input type="text" class="form-control" name="state" id="state" value="{{ $user->user_detail->state }}">
+                                                            @if($errors->has('state'))
+                                                                <span class="error">
+                                                                   {{ $errors->first('state') }}
+                                                                  </span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="country_id">@lang('message.dashboard.setting.country')</label>
+                                                            <select class="form-control" name="country_id" id="country_id">
+                                                                @foreach($countries as $country)
+                                                                    <option value="{{$country->id}}" <?= ($user->user_detail->country_id == $country->id) ? 'selected' : '' ?> >{{$country->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @if($errors->has('country_id'))
+                                                                <span class="error">
+                                                                   {{ $errors->first('country_id') }}
+                                                                  </span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="timezone">@lang('message.dashboard.setting.timezone')</label>
+
+                                                            <select class="form-control" name="timezone" id="timezone">
+                                                                @foreach($timezones as $timezone)
+                                                                  <option value="{{ $timezone['zone'] }}" {{ ($user->user_detail->timezone == $timezone['zone']) ? 'selected' : '' }}>
+                                                                    {{ $timezone['diff_from_GMT'] . ' - ' . $timezone['zone'] }}
+                                                                  </option>
+                                                                @endforeach
+                                                            </select>
+
+                                                            @if($errors->has('timezone'))
+                                                                <span class="error">
+                                                                   {{ $errors->first('timezone') }}
+                                                                  </span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <br />
+
+                                                    {{-- <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <button type="submit" class="btn btn-cust col-12" id="users_profile">
+                                                                <i class="spinner fa fa-spinner fa-spin" style="display: none;"></i> <span id="users_profile_text">@lang('message.dashboard.button.submit')</span>
+                                                            </button>
+                                                        </div>
+                                                    </div> --}}
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-12">
+                                                            <button type="submit" class="btn btn-primary col-12" id="users_profile">
+                                                                <i class="spinner fa fa-spinner fa-spin" style="display: none;"></i> <span id="users_profile_text">@lang('message.dashboard.button.submit')</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                        </div>
                                     </div>
-                                {{-- @endif --}}
-                                </div>
-                                <hr>
-                            @endif
-
-                            <div class="clearfix"></div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h4>@lang('message.dashboard.setting.profile-information')</h4>
                                     <hr>
-                                        <form method="post" action="{{url('prifile/update')}}" id="profile_update_form">
-                                            {{csrf_field()}}
+                                    <div class="clearfix"></div>
 
-                                            <input type="hidden" value="{{$user->id}}" name="id" id="id" />
-
-                                            <div class="row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="first_name">@lang('message.dashboard.setting.first-name')
-                                                        <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="first_name" id="first_name"
-                                                           value="{{ $user->first_name }}">
-                                                    @if($errors->has('first_name'))
-                                                        <span class="error">
-                                                           {{ $errors->first('first_name') }}
-                                                          </span>
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="last_name">@lang('message.dashboard.setting.last-name')
-                                                        <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="last_name" id="last_name"
-                                                           value="{{ $user->last_name }}">
-                                                    @if($errors->has('last_name'))
-                                                        <span class="error">
-                                                           {{ $errors->first('last_name') }}
-                                                          </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-
-                                            <div class="row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="email">@lang('message.dashboard.setting.email')
-                                                        <span class="text-danger">*</span></label>
-                                                    <input type="text" id="email" class="form-control" value="{{ $user->email }}" readonly>
-                                                </div>
-                                                <!-- Default Wallet -->
-                                                <div class="form-group col-md-6">
-                                                    <label for="email">@lang('message.dashboard.setting.default-wallet')
-                                                    </label>
-                                                    <select class="form-control" name="default_wallet" id="default_wallet">
-                                                        @foreach($wallets as $wallet)
-                                                            <option value="{{$wallet->id}}" {{$wallet->is_default == 'Yes' ? 'Selected' : ''}}>{{$wallet->currency->code}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-
-                                            <div class="row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="address_1">@lang('message.dashboard.setting.address1')</label>
-                                                    <textarea class="form-control" name="address_1"
-                                                              id="address_1">{{ $user->user_detail->address_1 }}</textarea>
-                                                    @if($errors->has('address_1'))
-                                                        <span class="error">
-                                                           {{ $errors->first('address_1') }}
-                                                          </span>
-                                                    @endif
-                                                </div>
-
-                                                <div class="form-group col-md-6">
-                                                    <label for="address_2">@lang('message.dashboard.setting.address2')</label>
-                                                    <textarea class="form-control" name="address_2"
-                                                              id="address_2">{{ $user->user_detail->address_2 }}</textarea>
-                                                    @if($errors->has('address_2'))
-                                                        <span class="error">
-                                                           {{ $errors->first('address_2') }}
-                                                          </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-
-
-                                            {{-- <div class="row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="address_2">@lang('message.dashboard.setting.address2')</label>
-                                                    <textarea class="form-control" name="address_2"
-                                                              id="address_2">{{ $user->user_detail->address_2 }}</textarea>
-                                                    @if($errors->has('address_2'))
-                                                        <span class="error">
-                                                           {{ $errors->first('address_2') }}
-                                                          </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div> --}}
-
-                                            <div class="row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="city">@lang('message.dashboard.setting.city')</label>
-
-                                                    <input type="text" class="form-control" name="city" id="city"
-                                                           value="{{ $user->user_detail->city }}">
-                                                    @if($errors->has('city'))
-                                                        <span class="error">
-                                                           {{ $errors->first('city') }}
-                                                          </span>
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="state">@lang('message.dashboard.setting.state')</label>
-                                                    <input type="text" class="form-control" name="state" id="state" value="{{ $user->user_detail->state }}">
-                                                    @if($errors->has('state'))
-                                                        <span class="error">
-                                                           {{ $errors->first('state') }}
-                                                          </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-
-                                            <div class="row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="country_id">@lang('message.dashboard.setting.country')</label>
-                                                    <select class="form-control" name="country_id" id="country_id">
-                                                        @foreach($countries as $country)
-                                                            <option value="{{$country->id}}" <?= ($user->user_detail->country_id == $country->id) ? 'selected' : '' ?> >{{$country->name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if($errors->has('country_id'))
-                                                        <span class="error">
-                                                           {{ $errors->first('country_id') }}
-                                                          </span>
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="timezone">@lang('message.dashboard.setting.timezone')</label>
-
-                                                    <select class="form-control" name="timezone" id="timezone">
-                                                        @foreach($timezones as $timezone)
-                                                          <option value="{{ $timezone['zone'] }}" {{ ($user->user_detail->timezone == $timezone['zone']) ? 'selected' : '' }}>
-                                                            {{ $timezone['diff_from_GMT'] . ' - ' . $timezone['zone'] }}
-                                                          </option>
-                                                        @endforeach
-                                                    </select>
-
-                                                    @if($errors->has('timezone'))
-                                                        <span class="error">
-                                                           {{ $errors->first('timezone') }}
-                                                          </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <br />
-
-                                            {{-- <div class="row">
-                                                <div class="form-group col-md-6">
-                                                    <button type="submit" class="btn btn-cust col-12" id="users_profile">
-                                                        <i class="spinner fa fa-spinner fa-spin" style="display: none;"></i> <span id="users_profile_text">@lang('message.dashboard.button.submit')</span>
-                                                    </button>
-                                                </div>
-                                            </div> --}}
-
-                                            <div class="row">
-                                                <div class="form-group col-md-12">
-                                                    <button type="submit" class="btn btn-cust col-12" id="users_profile">
-                                                        <i class="spinner fa fa-spinner fa-spin" style="display: none;"></i> <span id="users_profile_text">@lang('message.dashboard.button.submit')</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
                                 </div>
                             </div>
-                            <hr>
-                            <div class="clearfix"></div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+
+    </div>
+  </div>
+</div>
+
         </div>
-    </section>
+
+
 @endsection
 
 @section('js')

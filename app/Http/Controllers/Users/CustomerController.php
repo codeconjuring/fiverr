@@ -890,7 +890,7 @@ class CustomerController extends Controller
         $data['two_step_verification'] = $two_step_verification = Preference::where(['category' => 'preference', 'field' => 'two_step_verification'])->first(['value'])->value;
         $data['documentVerification']  = $documentVerification  = DocumentVerification::where(['user_id' => auth()->user()->id, 'verification_type' => 'identity'])->first();
 
-        return view('user_dashboard.users.personal_id', $data);
+        return view('user_dashboard.users.new_personal_id', $data);
     }
 
     public function updatePersonalId(Request $request)
@@ -989,7 +989,7 @@ class CustomerController extends Controller
 
         $data['documentVerification'] = $documentVerification = DocumentVerification::where(['user_id' => auth()->user()->id, 'verification_type' => 'address'])->first(['file_id']);
 
-        return view('user_dashboard.users.personal_address', $data);
+        return view('user_dashboard.users.new_personal_address', $data);
     }
 
     public function updatePersonalAddress(Request $request)

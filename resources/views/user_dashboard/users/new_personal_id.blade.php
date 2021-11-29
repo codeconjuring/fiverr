@@ -12,15 +12,70 @@
 @endsection
 
 @section('content')
-<div class="content-body" style="min-height: 1100px;">
+
+<div class="content-body">
+
     <div class="container-fluid">
-      <div class="page-titles">
-        <h4>Profile</h4>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="javascript:void(0)">App</a></li>
-          <li class="breadcrumb-item active"><a href="javascript:void(0)">@lang('message.personal-id.title')</a></li>
-        </ol>
+    <div class="page-titles">
+    <h4>Profile</h4>
+    <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="javascript:void(0)">App</a></li>
+    <li class="breadcrumb-item active"><a href="javascript:void(0)">@lang('message.personal-id.title')</a></li>
+    </ol>
+    </div>
+    <!-- row -->
+    <div class="row">
+    <div class="col-lg-12">
+        @include('user_dashboard.layouts.common.alert')
+
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+        @if (session('warning'))
+            <div class="alert alert-warning">
+                {{ session('warning') }}
+            </div>
+        @endif
+    <div class="profile card card-body px-3 pt-3 pb-0">
+    <div class="profile-head">
+      <div class="photo-content">
+        <div class="cover-photo"></div>
       </div>
+      <div class="profile-info">
+        <div class="profile-photo">
+            @if(!empty(Auth::user()->picture))
+                <img src="{{url('public/user_dashboard/profile/'.Auth::user()->picture)}}"
+                        class="img-fluid rounded-circle"
+                        id="profileImage">
+            @else
+                <img src="{{url('public/user_dashboard/images/avatar.jpg')}}"
+                        class="rounded-circle rounded-circle-custom-trans"
+                        id="profileImage">
+
+            @endif
+        </div>
+        <div class="profile-details">
+          <div class="profile-name px-3 pt-2">
+              <h4 class="text-primary mb-0">{{ auth()->user()->first_name .' '. auth()->user()->last_name }}</h4>
+              <p>Full name</p>
+          </div>
+          <div class="profile-email px-2 pt-2">
+              <h4 class="text-muted mb-0">{{ auth()->user()->email }}</h4>
+              <p>Email</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+
+
+
       <div class="row">
 
         <div class="col-xl-12">

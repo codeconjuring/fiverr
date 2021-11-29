@@ -345,33 +345,6 @@
                                                         </span>
                                                     </span>
                                                     </div>
-                                                    <div>
-                                                        <img src='{{asset("public/uploads/currency_logos/".$wallet->currency->logo)}}' class="img-responsive" style="float: none;">
-                                                    <span class="float-right">
-                                                         <!--BALANCE-->
-                                                        <span class="float-right" style="position: relative;top: 7px;">
-                                                            @if($wallet->balance > 0)
-                                                                @if ($wallet->currency->type != 'fiat')
-                                                                    <span class="text-white">{{ '+'.$wallet->balance }}</span>
-                                                                @else
-                                                                    <span class="text-white">{{ '+'.formatNumber($wallet->balance) }}</span>
-                                                                @endif
-                                                            @elseif($wallet->balance == 0)
-                                                                @if ($wallet->currency->type != 'fiat')
-                                                                    <span>{{ $wallet->balance }}</span>
-                                                                @else
-                                                                    <span>{{ '+'.formatNumber($wallet->balance) }}</span>
-                                                                @endif
-                                                            @elseif($wallet->balance < 0)
-                                                                @if ($wallet->currency->type != 'fiat')
-                                                                    <span class="text-danger">{{ $wallet->balance }}</span>
-                                                                @else
-                                                                    <span class="text-danger">{{ '+'.formatNumber($wallet->balance) }}</span>
-                                                                @endif
-                                                            @endif
-                                                        </span>
-                                                    </span>
-                                                    </div>
                                                 @endif
 
                                                 <!--Currency Code-->

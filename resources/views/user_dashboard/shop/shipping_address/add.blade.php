@@ -1,4 +1,4 @@
-@extends('user_dashboard.layouts.app')
+@extends('user_dashboard.layouts.new_app')
 
 @section('css')
     <!-- sweetalert -->
@@ -35,7 +35,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="chart-list float-left">
-                                Shipping Address                       
+                                Shipping Address
                             </div>
                         </div>
                         <div class="card-body">
@@ -189,7 +189,7 @@
                                             {{-- Website --}}
                                             <div class="form-group col-md-6">
                                                 <label for="website"> Website </label>
-                                                <input type="text" class="form-control" name="website" id="website" value="{{ isset($shippingAddress->website) ? $shippingAddress->website : '' }}" > 
+                                                <input type="text" class="form-control" name="website" id="website" value="{{ isset($shippingAddress->website) ? $shippingAddress->website : '' }}" >
                                                 {{-- placeholder="Add your website" --}}
                                                 @if($errors->has('website'))
                                                     <span class="error">
@@ -215,15 +215,15 @@
                                                         <i class="spinner fa fa-spinner fa-spin" style="display: none;"></i> <span id="create_store_text">Add</span>
                                                     </button>
                                                 @endif
-                                                
+
                                             </div>
                                         </div>
 
-                                        
+
                                     </form>
                                 </div>
                             </div>
-                
+
                             <div class="clearfix"></div>
 
                         </div>
@@ -241,7 +241,7 @@
 <script src="{{ asset('public/backend/sweetalert/sweetalert.min.js')}}" type="text/javascript"></script>
 
 <script>
-    
+
     $('.select2').select2({});
     // flag for button disable/enable
     var shippingAddress_error_code = false;
@@ -320,5 +320,5 @@
 </script>
 
 @endsection
-   
+
 

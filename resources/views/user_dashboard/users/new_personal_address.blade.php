@@ -11,9 +11,7 @@
 @endsection
 
 @section('content')
-<div class="content-body">
 
-    <div class="container-fluid">
     <div class="page-titles">
     <h4>Profile</h4>
     <ol class="breadcrumb">
@@ -173,7 +171,7 @@
       </div>
     </div>
 
-            </div>
+
 @endsection
 
 @section('js')

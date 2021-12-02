@@ -1,4 +1,4 @@
-@extends('user_dashboard.layouts.app')
+@extends('user_dashboard.layouts.new_app')
 
 @section('css')
     <style>
@@ -58,7 +58,7 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="right mb10" style="padding:10px;">
                             <a href="{{ url('product-categories/add') }}" class="btn btn-cust ticket-btn pull-right"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i>&nbsp; Add Product Category</a>
                         </div>
@@ -66,7 +66,7 @@
 
                         <div class="table-responsive">
                             @if($product_categories->count() > 0)
-    
+
                             <table class="table recent_activity">
                                 <thead>
                                     <tr>
@@ -100,7 +100,7 @@
                                         </td>
                                         <td>
                                             <a href="{{ url('product-categories/edit/'.$productCategory->id) }}" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></a>
-                                            
+
                                             {{-- <form action="{{ url('product-categories/delete') }}" method="post" style="display: inline">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $productCategory->id }}">
@@ -124,7 +124,7 @@
                             {{ $product_categories->links('vendor.pagination.bootstrap-4') }}
                         </div>
 
-                        
+
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-@extends('user_dashboard.layouts.app')
+@extends('user_dashboard.layouts.new_app')
 
 @section('css')
     <style>
@@ -11,6 +11,9 @@
 @endsection
 
 @section('content')
+
+
+
     <section class="section-06 history padding-30">
         <div class="container">
             <div class="row">
@@ -267,6 +270,9 @@
             </div>
         </div>
     </section>
+
+
+
 @endsection
 
 @section('js')
@@ -293,7 +299,7 @@
         generateStandardPaymentFormBtn = document.getElementById('generate-standard-payment-form');
         BtnClose = document.getElementById('form-modal-close');
         BtnCross = document.getElementById('form-modal-cross');
-        
+
         generateStandardPaymentFormBtn.onclick = function ()
         {
             var merchant_id = f1.value,

@@ -1,4 +1,4 @@
-@extends('user_dashboard.layouts.app')
+@extends('user_dashboard.layouts.new_app')
 
 @section('css')
     <style>
@@ -58,7 +58,7 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="right mb10" style="padding:10px;">
                             <a href="{{url('/stores/add')}}" class="btn btn-cust ticket-btn pull-right"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i>&nbsp; Create Store</a>
                         </div>
@@ -66,7 +66,7 @@
 
                         <div class="table-responsive">
                             @if($stores->count() > 0)
-    
+
                             <table class="table recent_activity">
                                 <thead>
                                     <tr>
@@ -85,14 +85,14 @@
                                     <tr>
                                         <td class="text-left">
                                             <a class="store" href="{{ url('shop/'.$store->id.'/'.$store->slug) }}" target="_blank">{{ $store->name }}</a>
-                                             
+
                                         </td>
                                         <td>
                                             @if(!empty($store->photo))
                                                 <img src="{{url('public/images/shop/store/' . $store->photo)}}" class="rounded-circle rounded-circle-custom-trans">
                                             @else
                                                 <img src="{{url('public/dist/img/shop/store.jpg')}}" class="rounded-circle rounded-circle-custom-trans">
-                                            
+
                                             @endif
                                         </td>
                                         <td class="text-left">{{ $store->store_code }} </td>
@@ -108,7 +108,7 @@
                                         </td>
                                         <td>
                                             <a href="{{ url('stores/edit/'.$store->id) }}" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></a>
-                                            
+
                                             {{-- <form action="{{ url('stores/delete') }}" method="post" style="display: inline">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{$store->id}}">

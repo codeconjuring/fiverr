@@ -1,4 +1,4 @@
-@extends('user_dashboard.layouts.app')
+@extends('user_dashboard.layouts.new_app')
 
 
 @section('content')
@@ -10,7 +10,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="chart-list float-left">
-                                Create Store                                  
+                                Create Store
                             </div>
                         </div>
                         <div class="card-body">
@@ -155,7 +155,7 @@
                                                     </span>
                                                 @endif
                                             </div>
-                                            
+
                                         </div>
                                         <div class="clearfix"></div>
 
@@ -184,7 +184,7 @@
                                         <div class="clearfix"></div>
 
                                         <br />
-                                    
+
                                         <br>
                                         <div class="row">
                                             <div class="form-group col-md-12">
@@ -330,5 +330,5 @@
 </script>
 
 @endsection
-   
+
 

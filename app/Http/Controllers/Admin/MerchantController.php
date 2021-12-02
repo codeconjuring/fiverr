@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Users\EmailController;
 use App\DataTables\Admin\MerchantsDataTable;
-use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Facades\Image;
 use App\Http\Controllers\Controller;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Users\EmailController;
 use App\Http\Helpers\Common;
-use App\Models\{Currency,
-    MerchantPayment,
-    MerchantGroup,
-    MerchantApp,
-    Merchant
-};
-use Exception;
+use App\Models\Currency;
+use App\Models\Merchant;
+use App\Models\MerchantApp;
+use App\Models\MerchantGroup;
+use App\Models\MerchantPayment;
+use Exception;use Illuminate\Http\Request;use Illuminate\Support\Facades\DB;use Illuminate\Support\Facades\Validator;use Intervention\Image\Facades\Image;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MerchantController extends Controller
 {
@@ -34,16 +29,17 @@ class MerchantController extends Controller
 
     public function index(MerchantsDataTable $dataTable)
     {
+
         $data['menu']     = 'merchant';
         $data['sub_menu'] = 'merchant_details';
 
         $data['merchants_status'] = $merchants_status = $this->merchant->select('status')->groupBy('status')->get();
 
-        $data['from']     = isset(request()->from) ? setDateForDb(request()->from) : null;
-        $data['to']       = isset(request()->to ) ? setDateForDb(request()->to) : null;
-        $data['status']   = isset(request()->status) ? request()->status : 'all';
-        $data['user']     = $user    = isset(request()->user_id) ? request()->user_id : null;
-        $data['getName']  = $getName = $this->merchant->getMerchantsUserName($user);
+        $data['from']    = isset(request()->from) ? setDateForDb(request()->from) : null;
+        $data['to']      = isset(request()->to) ? setDateForDb(request()->to) : null;
+        $data['status']  = isset(request()->status) ? request()->status : 'all';
+        $data['user']    = $user    = isset(request()->user_id) ? request()->user_id : null;
+        $data['getName'] = $getName = $this->merchant->getMerchantsUserName($user);
 
         return $dataTable->render('admin.merchants.list', $data);
     }
@@ -61,10 +57,8 @@ class MerchantController extends Controller
         $data['merchants'] = $merchants = $this->merchant->getMerchantsList($from, $to, $status, $user)->orderBy('merchants.id', 'desc')->get();
 
         $datas = [];
-        if (!empty($merchants))
-        {
-            foreach ($merchants as $key => $value)
-            {
+        if (!empty($merchants)) {
+            foreach ($merchants as $key => $value) {
                 $datas[$key]['Date']          = dateFormat($value->created_at);
                 $datas[$key]['ID']            = (isset($value->merchant_uuid)) ? $value->merchant_uuid : '-';
                 $datas[$key]['Type']          = ucfirst($value->type);
@@ -75,9 +69,7 @@ class MerchantController extends Controller
                 $datas[$key]['Logo']          = isset($value->logo) ? $value->logo : "-";
                 $datas[$key]['Status']        = $value->status;
             }
-        }
-        else
-        {
+        } else {
             $datas[0]['Date']          = '';
             $datas[$key]['ID']         = '';
             $datas[$key]['Type']       = '';
@@ -89,14 +81,11 @@ class MerchantController extends Controller
             $datas[0]['Status']        = '';
         }
 
-        return Excel::create('merchants_list_' . time() . '', function ($excel) use ($datas)
-        {
+        return Excel::create('merchants_list_' . time() . '', function ($excel) use ($datas) {
             $excel->getDefaultStyle()->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $excel->sheet('mySheet', function ($sheet) use ($datas)
-            {
-                $sheet->cells('A1:I1', function ($cells)
-                {
+            $excel->sheet('mySheet', function ($sheet) use ($datas) {
+                $sheet->cells('A1:I1', function ($cells) {
                     $cells->setFontWeight('bold');
                 });
                 $sheet->fromArray($datas);
@@ -118,12 +107,9 @@ class MerchantController extends Controller
 
         $data['merchants'] = $merchants = $this->merchant->getMerchantsList($from, $to, $status, $user)->orderBy('merchants.id', 'desc')->get();
 
-        if (isset($from) && isset($to))
-        {
+        if (isset($from) && isset($to)) {
             $data['date_range'] = $from . ' To ' . $to;
-        }
-        else
-        {
+        } else {
             $data['date_range'] = 'N/A';
         }
 
@@ -152,8 +138,7 @@ class MerchantController extends Controller
         $res = [
             'status' => 'fail',
         ];
-        if (count($user) > 0)
-        {
+        if (count($user) > 0) {
             $res = [
                 'status' => 'success',
                 'data'   => $user,
@@ -164,10 +149,10 @@ class MerchantController extends Controller
 
     public function edit($id)
     {
-        $data['menu']     = 'merchant';
-        $data['sub_menu'] = 'merchant_details';
-        $data['merchant'] = $merchant = Merchant::find($id);
-        $data['merchantGroup']    = $merchantGroup    = MerchantGroup::get(['id','name']);
+        $data['menu']             = 'merchant';
+        $data['sub_menu']         = 'merchant_details';
+        $data['merchant']         = $merchant         = Merchant::find($id);
+        $data['merchantGroup']    = $merchantGroup    = MerchantGroup::get(['id', 'name']);
         $data['activeCurrencies'] = $activeCurrencies = Currency::where(['status' => 'Active', 'type' => 'fiat'])->get(['id', 'code']);
 
         //check Decimal Thousand Money Format Preference
@@ -194,28 +179,21 @@ class MerchantController extends Controller
         $validator = Validator::make($request->all(), $rules);
         $validator->setAttributeNames($fieldNames);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        }
-        else
-        {
+        } else {
             $picture  = $request->logo;
             $filename = null;
-            if (isset($picture))
-            {
+            if (isset($picture)) {
                 $dir = public_path("/user_dashboard/merchant/");
                 //extension checking
                 $ext = strtolower($picture->getClientOriginalExtension());
-                if ($ext == 'png' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'bmp')
-                {
+                if ($ext == 'png' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'bmp') {
                     $filename = time() . '.' . $ext;
                     $img      = Image::make($picture->getRealPath());
                     $img->resize(100, 80)->save($dir . '/' . $filename);
                     $img->resize(70, 70)->save($dir . '/thumb/' . $filename);
-                }
-                else
-                {
+                } else {
                     $this->helper->one_time_message('error', 'Invalid Image Format!');
                 }
             }
@@ -227,19 +205,15 @@ class MerchantController extends Controller
                 $merchant->currency_id       = $request->currency_id; //2.3
                 $merchant->merchant_group_id = $request->merchantGroup;
                 $merchant->type              = $request->type;
-                if ($request->type == 'express')
-                {
+                if ($request->type == 'express') {
                     $checkMerchantApp = MerchantApp::where(['merchant_id' => $request->id])->first();
 
-                    if (empty($checkMerchantApp))
-                    {
+                    if (empty($checkMerchantApp)) {
                         $merchant->appInfo()->create([
                             'client_id'     => str_random(30),
                             'client_secret' => str_random(100),
                         ]);
-                    }
-                    else
-                    {
+                    } else {
                         $merchantApp                = MerchantApp::find($checkMerchantApp->id);
                         $merchantApp->client_id     = $checkMerchantApp->client_id;
                         $merchantApp->client_secret = $checkMerchantApp->client_secret;
@@ -249,8 +223,7 @@ class MerchantController extends Controller
                 $merchant->business_name = $request->business_name;
                 $merchant->site_url      = $request->site_url;
                 $merchant->fee           = $request->fee;
-                if ($filename != null)
-                {
+                if ($filename != null) {
                     $merchant->logo = $filename;
                 }
                 $merchant->status = $request->status;
@@ -259,9 +232,7 @@ class MerchantController extends Controller
                 DB::commit();
                 $this->helper->one_time_message('success', 'Merchant Updated Successfully!');
                 return redirect('admin/merchants');
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 DB::rollBack();
                 $this->helper->one_time_message('error', $e->getMessage());
                 return redirect('admin/merchants');
@@ -272,27 +243,21 @@ class MerchantController extends Controller
     public function deleteMerchantLogo(Request $request)
     {
         $logo = $request->logo;
-        if (isset($logo))
-        {
+        if (isset($logo)) {
             $merchant = Merchant::where(['id' => $request->merchant_id, 'logo' => $request->logo])->first();
 
-            if ($merchant)
-            {
+            if ($merchant) {
                 Merchant::where(['id' => $request->merchant_id, 'logo' => $request->logo])->update(['logo' => null]);
 
-                if ($logo != null)
-                {
+                if ($logo != null) {
                     $dir = public_path('user_dashboard/merchant/' . $logo);
-                    if (file_exists($dir))
-                    {
+                    if (file_exists($dir)) {
                         unlink($dir);
                     }
                 }
                 $data['success'] = 1;
                 $data['message'] = 'Logo deleted successfully!';
-            }
-            else
-            {
+            } else {
                 $data['success'] = 0;
                 $data['message'] = "No Record Found!";
             }
@@ -312,16 +277,12 @@ class MerchantController extends Controller
 
     public function changeMerchantFeeWithGroupChange(Request $request)
     {
-        if ($request->merchant_group_id)
-        {
+        if ($request->merchant_group_id) {
             $merchantGroup = MerchantGroup::where(['id' => $request->merchant_group_id])->first(['fee']);
-            if ($merchantGroup)
-            {
+            if ($merchantGroup) {
                 $data['status'] = true;
                 $data['fee']    = $merchantGroup->fee;
-            }
-            else
-            {
+            } else {
                 $data['status'] = false;
             }
             return $data;

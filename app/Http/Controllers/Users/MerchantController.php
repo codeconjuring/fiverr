@@ -3,25 +3,22 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use Intervention\Image\Facades\Image;
-
-use Illuminate\Support\Facades\{DB,
-    Validator,
-    Auth
-};
-
-use Illuminate\Http\Request;
 use App\Http\Helpers\Common;
-use App\Models\{Currency,
-    MerchantPayment,
-    MerchantGroup,
-    Merchant,
-    Wallet,
-    QrCode,
-    User
 
-};
-use Exception;
+use App\Models\Currency;
+use App\Models\Merchant;
+use App\Models\MerchantGroup;
+
+use App\Models\MerchantPayment;
+
+use App\Models\QrCode;
+
+use App\Models\User;;
+use App\Models\Wallet;use Exception;use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
 
 class MerchantController extends Controller
 {
@@ -47,9 +44,10 @@ class MerchantController extends Controller
 
         return view('user_dashboard.Merchant.list', $data);
     }
-    
+
     //Standard Merchant QrCode - starts
-    public function generateStandardMerchantPaymentQrCode(Request $request) {
+    public function generateStandardMerchantPaymentQrCode(Request $request)
+    {
         // dd($request->all());
         $qrCode           = QrCode::where(['object_id' => $request->merchantId, 'object_type' => 'standard_merchant', 'status' => 'Active'])->first(['id', 'secret']);
         $merchantCurrency = Currency::where('id', $request->merchantDefaultCurrency)->first(['code']); // NEW - THIS IS ADDED AS in PAYMONEY 2.1 THERE WAS DEFAULT CURRENCY WHEN QRCODE WAS DONE
@@ -85,7 +83,8 @@ class MerchantController extends Controller
     //Standard Merchant QrCode - ends
 
     //Express Merchant QrCode - starts
-    public function generateExpressMerchantQrCode(Request $request) {
+    public function generateExpressMerchantQrCode(Request $request)
+    {
         // dd($request->all());
 
         //merchantDefaultCurrencyId
@@ -111,7 +110,8 @@ class MerchantController extends Controller
         }
     }
 
-    public function updateExpressMerchantQrCode(Request $request) {
+    public function updateExpressMerchantQrCode(Request $request)
+    {
         // dd($request->all());
 
         $qrCode = QrCode::where(['object_id' => $request->merchantId, 'object_type' => 'express_merchant', 'status' => 'Active'])->first(['id', 'secret']);
@@ -149,7 +149,8 @@ class MerchantController extends Controller
     //Express Merchant QrCode - ends
 
     //Print Merchant QrCode - starts
-    public function printMerchantQrCode($merchantId, $objectType) {
+    public function printMerchantQrCode($merchantId, $objectType)
+    {
         $this->helper->printQrCode($merchantId, $objectType);
     }
     //Print Merchant QrCode - ends
@@ -187,32 +188,25 @@ class MerchantController extends Controller
         $validator = Validator::make($request->all(), $rules);
         $validator->setAttributeNames($fieldNames);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        }
-        else
-        {
+        } else {
             try
             {
                 DB::beginTransaction();
 
                 $filename = null;
                 $picture  = $request->logo;
-                if (isset($picture))
-                {
-                    $dir = public_path("/user_dashboard/merchant/");
-                    $ext = $picture->getClientOriginalExtension();
+                if (isset($picture)) {
+                    $dir      = public_path("/user_dashboard/merchant/");
+                    $ext      = $picture->getClientOriginalExtension();
                     $filename = time() . '.' . $ext;
 
-                    if ($ext == 'png' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'bmp')
-                    {
+                    if ($ext == 'png' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'bmp') {
                         $img = Image::make($picture->getRealPath());
                         $img->resize(100, 80)->save($dir . '/' . $filename);
                         $img->resize(70, 70)->save($dir . '/thumb/' . $filename);
-                    }
-                    else
-                    {
+                    } else {
                         $this->helper->one_time_message('error', 'Invalid Image Format!');
                     }
                 }
@@ -232,16 +226,13 @@ class MerchantController extends Controller
                 $Merchant->fee               = isset($merchantGroup) ? $merchantGroup->fee : 0.00;
                 $Merchant->save();
 
-                if (strtolower($request->type) == 'express')
-                {
+                if (strtolower($request->type) == 'express') {
                     try {
                         $Merchant->appInfo()->create([
                             'client_id'     => str_random(30),
                             'client_secret' => str_random(100),
                         ]);
-                    }
-                    catch (Exception $ex)
-                    {
+                    } catch (Exception $ex) {
                         DB::rollBack();
                         $this->helper->one_time_message('error', __('Client id must be unique. Please try again!'));
                         return back();
@@ -251,9 +242,7 @@ class MerchantController extends Controller
                 DB::commit();
                 $this->helper->one_time_message('success', __('Merchant Created Successfully!'));
                 return redirect('merchants');
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 DB::rollBack();
                 $this->helper->one_time_message('error', $e->getMessage());
                 return redirect('merchants');
@@ -270,8 +259,7 @@ class MerchantController extends Controller
         $data['activeCurrencies'] = $activeCurrencies = Currency::where(['status' => 'Active', 'type' => 'fiat'])->get(['id', 'code']);
         $data['merchant']         = $merchant         = Merchant::with('currency:id,code')->find($id);
         $data['defaultWallet']    = $defaultWallet    = Wallet::with(['currency:id,code'])->where(['user_id' => $merchant->user->id, 'is_default' => 'Yes'])->first(['currency_id']); //new
-        if (!isset($merchant) || $merchant->user_id != Auth::user()->id)
-        {
+        if (!isset($merchant) || $merchant->user_id != Auth::user()->id) {
             abort(404);
         }
         return view('user_dashboard.Merchant.edit', $data);
@@ -296,12 +284,9 @@ class MerchantController extends Controller
         $validator = Validator::make($request->all(), $rules);
         $validator->setAttributeNames($fieldNames);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        }
-        else
-        {
+        } else {
             $picture  = $request->logo;
             $filename = null;
 
@@ -309,20 +294,16 @@ class MerchantController extends Controller
             {
                 DB::beginTransaction();
 
-                if (isset($picture))
-                {
+                if (isset($picture)) {
                     $dir      = public_path("/user_dashboard/merchant/");
                     $ext      = $picture->getClientOriginalExtension();
                     $filename = time() . '.' . $ext;
 
-                    if ($ext == 'png' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'bmp')
-                    {
+                    if ($ext == 'png' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'bmp') {
                         $img = Image::make($picture->getRealPath());
                         $img->resize(100, 80)->save($dir . '/' . $filename);
                         $img->resize(70, 70)->save($dir . '/thumb/' . $filename);
-                    }
-                    else
-                    {
+                    } else {
                         $this->helper->one_time_message('error', 'Invalid Image Format!');
                     }
                 }
@@ -331,8 +312,7 @@ class MerchantController extends Controller
                 $Merchant->business_name = $request->business_name;
                 $Merchant->site_url      = $request->site_url;
                 $Merchant->note          = $request->note;
-                if ($filename != null)
-                {
+                if ($filename != null) {
                     $Merchant->logo = $filename;
                 }
                 $Merchant->save();
@@ -340,9 +320,7 @@ class MerchantController extends Controller
                 DB::commit();
                 $this->helper->one_time_message('success', __('Merchant Updated Successfully!'));
                 return redirect('merchants');
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 DB::rollBack();
                 $this->helper->one_time_message('error', $e->getMessage());
                 return redirect('merchants');
@@ -358,8 +336,7 @@ class MerchantController extends Controller
         $data['icon']          = 'user';
         $data['merchant']      = $merchant      = Merchant::find($id);
         $data['defaultWallet'] = $defaultWallet = Wallet::with(['currency:id,code'])->where(['user_id' => $merchant->user->id, 'is_default' => 'Yes'])->first(['currency_id']); //new
-        if (!isset($merchant) || $merchant->user_id != Auth::user()->id)
-        {
+        if (!isset($merchant) || $merchant->user_id != Auth::user()->id) {
             abort(404);
         }
         return view('user_dashboard.Merchant.detail', $data);
@@ -367,6 +344,7 @@ class MerchantController extends Controller
 
     public function payments()
     {
+
         $data['menu']              = 'merchant_payment';
         $data['sub_menu']          = 'merchant_payment';
         $data['content_title']     = 'Merchant payments';

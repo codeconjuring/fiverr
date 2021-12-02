@@ -21,9 +21,6 @@
 @section('content')
 
 
-<div class="content-body">
-
-<div class="container-fluid">
 <div class="page-titles">
 <h4>Profile</h4>
 <ol class="breadcrumb">
@@ -116,7 +113,7 @@
 
 
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-4 col-4 col-sm-4 col-lg-4 col-xl-4">
             @if(!empty(Auth::user()->picture))
                 <img src="{{url('public/user_dashboard/profile/'.Auth::user()->picture)}}"
                      class="rounded-circle rounded-circle-custom-trans"
@@ -128,7 +125,7 @@
 
             @endif
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8 col-8 col-sm-8 col-lg-8 col-xl-8">
             <h4>@lang('message.dashboard.setting.change-avatar')</h4>
             <p>@lang('message.dashboard.setting.change-avatar-here')</p>
             <strong style="font-size: 12px !important;">*{{__('Recommended Dimension')}}: 100 px * 100 px</strong>
@@ -136,7 +133,7 @@
             <input type="file" id="file" style="display: none"/>
             <input type="hidden" id="file_name"/>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-12 col-12 col-sm-12 col-lg-12 col-xl-12">
             <div class="uploadAvatar">
                 <a href="javascript:changeProfile()" id="changePicture"
                    class="btn btn-primary mb-1"
@@ -151,14 +148,14 @@
 
 
 
-            <div class="col-md-2">
+            <div class="col-md-4 col-4 col-sm-4 col-lg-4 col-xl-4">
                 <img width="60px" src="{{ url('public/user_dashboard/images/phone-icon.png') }}" class="rounded-circle rounded-circle-custom-trans">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8 col-8 col-sm-8 col-lg-8 col-xl-8">
                 <h4 class="editPhoneTitle">@lang('message.dashboard.setting.phone-number')</h4>
                 <p class="editPhoneBody">{{ auth()->user()->phone }}</p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-12 col-12 col-sm-12 col-lg-12 col-xl-12">
                 <div class="uploadAvatar">
                     <button type="button" class="btn btn-primary mb-1 editModal" data-toggle="modal" data-target="#editModal" style="margin-top: 10px;">
                         <i class="fa fa-edit"></i>
@@ -249,14 +246,14 @@
 
 
 
-                <div class="col-md-2">
+                <div class="col-md-4 col-4 col-sm-4 col-lg-4 col-xl-4">
                     <img width="60px" src="{{url('public/user_dashboard/images/password-icon.png')}}" class="rounded-circle rounded-circle-custom-trans">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8 col-8 col-sm-8 col-lg-8 col-xl-8">
                     <h4>@lang('message.dashboard.setting.change-password')</h4>
                     <p>@lang('message.dashboard.setting.change-password-here')</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 col-12 col-sm-12 col-lg-12 col-xl-12">
                     <button type="button" class="btn btn-primary mb-1" data-toggle="modal"
                             data-target="#myModal">
                         @lang('message.dashboard.button.change-password')
@@ -544,9 +541,7 @@
 </div>
 </div>
 </div>
-</div>
 
-</div>
 
 
 

@@ -1,4 +1,4 @@
-@extends('user_dashboard.layouts.app')
+@extends('user_dashboard.layouts.new_app')
 
 @section('css')
     <!--sweetalert-->
@@ -49,17 +49,17 @@
 
                     @php
 
-                    if (!empty(auth()->user()->referral_code)) 
+                    if (!empty(auth()->user()->referral_code))
                     {
                         $referralCodeWithSite = url("/referral-link", auth()->user()->referral_code->code);
 
-                    } 
-                    else 
+                    }
+                    else
                     {
                         $referralCodeWithSite = url("/referral-link", $referralCode);
-                        
+
                     }
-                        
+
                     @endphp
 
                     <div id="social-links">

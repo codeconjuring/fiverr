@@ -2,22 +2,18 @@
 
 namespace App\Http\Controllers\Users;
 
-use Illuminate\Support\Facades\{Validator,
-    Auth
-};
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App;use App\Http\Controllers\Controller;
 use App\Http\Helpers\Common;
-use App\Models\{Currency,
-    Transaction,
-    FeesLimit,
-    Transfer,
-    Setting,
-    Wallet,
-    User,
-    Fee 
-};
-use App;
+use App\Models\Currency;
+use App\Models\Fee;
+use App\Models\FeesLimit;
+use App\Models\Setting;
+use App\Models\Transaction;
+use App\Models\Transfer;
+use App\Models\User;
+use App\Models\Wallet;use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class MoneyTransferController extends Controller
 {
@@ -34,12 +30,10 @@ class MoneyTransferController extends Controller
     public function transferUserEmailPhoneReceiverStatusValidate(Request $request)
     {
         $phoneRegex = $this->helper->validatePhoneInput(trim($request->receiver));
-        if ($phoneRegex)
-        {
+        if ($phoneRegex) {
             //Check phone number exists or not
             $user = User::where(['id' => auth()->user()->id])->first(['formattedPhone']);
-            if (empty($user->formattedPhone))
-            {
+            if (empty($user->formattedPhone)) {
                 return response()->json([
                     'status'  => 404,
                     'message' => __("Please set your phone number first!"),
@@ -47,8 +41,7 @@ class MoneyTransferController extends Controller
             }
 
             //Check own phone number
-            if ($request->receiver == auth()->user()->formattedPhone)
-            {
+            if ($request->receiver == auth()->user()->formattedPhone) {
                 return response()->json([
                     'status'  => true,
                     'message' => __("You Cannot Send Money To Yourself!"),
@@ -57,29 +50,22 @@ class MoneyTransferController extends Controller
 
             //Check Receiver/Recipient is suspended/inactive - if entered phone number
             $receiver = User::where(['formattedPhone' => $request->receiver])->first(['status']);
-            if (!empty($receiver))
-            {
-                if ($receiver->status == 'Suspended')
-                {
+            if (!empty($receiver)) {
+                if ($receiver->status == 'Suspended') {
                     return response()->json([
                         'status'  => true,
                         'message' => __("The recipient is suspended!"),
                     ]);
-                }
-                elseif ($receiver->status == 'Inactive')
-                {
+                } elseif ($receiver->status == 'Inactive') {
                     return response()->json([
                         'status'  => true,
                         'message' => __("The recipient is inactive!"),
                     ]);
                 }
             }
-        }
-        else
-        {
+        } else {
             //Check own phone email
-            if ($request->receiver == auth()->user()->email)
-            {
+            if ($request->receiver == auth()->user()->email) {
                 return response()->json([
                     'status'  => true,
                     'message' => __("You Cannot Send Money To Yourself!"),
@@ -88,17 +74,13 @@ class MoneyTransferController extends Controller
 
             //Check Receiver/Recipient is suspended/inactive - if entered email
             $receiver = User::where(['email' => trim($request->receiver)])->first(['status']);
-            if (!empty($receiver))
-            {
-                if ($receiver->status == 'Suspended')
-                {
+            if (!empty($receiver)) {
+                if ($receiver->status == 'Suspended') {
                     return response()->json([
                         'status'  => true,
                         'message' => __("The recipient is suspended!"),
                     ]);
-                }
-                elseif ($receiver->status == 'Inactive')
-                {
+                } elseif ($receiver->status == 'Inactive') {
                     return response()->json([
                         'status'  => true,
                         'message' => __("The recipient is inactive!"),
@@ -110,20 +92,19 @@ class MoneyTransferController extends Controller
 
     public function create(Request $request)
     {
+
         //set the session for validating the action
         setActionSession();
 
         $data['menu']    = 'send_receive';
         $data['submenu'] = 'send';
 
-        if (!$request->isMethod('post'))
-        {
+        if (!$request->isMethod('post')) {
+
             /*Check Whether Currency is Activated in feesLimit*/
             $data['walletList'] = Wallet::where(['user_id' => auth()->user()->id])
-                ->whereHas('active_currency', function ($q)
-            {
-                    $q->whereHas('fees_limit', function ($query)
-                {
+                ->whereHas('active_currency', function ($q) {
+                    $q->whereHas('fees_limit', function ($query) {
                         $query->where('transaction_type_id', Transferred)->where('has_transaction', 'Yes')->select('currency_id', 'has_transaction');
                     });
                 })
@@ -134,9 +115,7 @@ class MoneyTransferController extends Controller
             $data['preference'] = getDecimalThousandMoneyFormatPref(['decimal_format_amount']);
 
             return view('user_dashboard.moneytransfer.create', $data);
-        }
-        else if ($request->isMethod('post'))
-        {
+        } else if ($request->isMethod('post')) {
             $rules = array(
                 'amount'   => 'required|numeric',
                 'receiver' => 'required',
@@ -155,26 +134,19 @@ class MoneyTransferController extends Controller
             ];
 
             // backend Validation - starts
-            if ($request->sendMoneyProcessedBy == 'email')
-            {
+            if ($request->sendMoneyProcessedBy == 'email') {
                 //check if valid email
                 $rules['receiver'] = 'required|email';
-            }
-            elseif ($request->sendMoneyProcessedBy == 'phone')
-            {
+            } elseif ($request->sendMoneyProcessedBy == 'phone') {
                 //check if valid phone
                 $myStr = explode('+', $request->receiver);
-                if ($request->receiver[0] != "+" || !is_numeric($myStr[1]))
-                {
+                if ($request->receiver[0] != "+" || !is_numeric($myStr[1])) {
                     return back()->withErrors(__("Please enter valid phone (ex: +12015550123)"))->withInput();
                 }
-            }
-            elseif ($request->sendMoneyProcessedBy == 'email_or_phone')
-            {
+            } elseif ($request->sendMoneyProcessedBy == 'email_or_phone') {
                 $myStr = explode('+', $request->receiver);
                 //valid number is not entered
-                if ($request->receiver[0] != "+" || !is_numeric($myStr[1]))
-                {
+                if ($request->receiver[0] != "+" || !is_numeric($myStr[1])) {
                     //check if valid email or phone
                     $rules['receiver'] = 'required|email';
                     $messages          = [
@@ -185,10 +157,8 @@ class MoneyTransferController extends Controller
 
             //Own Email or phone validation + Receiver/Recipient is suspended/Inactive validation
             $transferUserEmailPhoneReceiverStatusValidate = $this->transferUserEmailPhoneReceiverStatusValidate($request);
-            if ($transferUserEmailPhoneReceiverStatusValidate)
-            {
-                if ($transferUserEmailPhoneReceiverStatusValidate->getData()->status == true || $transferUserEmailPhoneReceiverStatusValidate->getData()->status == 404)
-                {
+            if ($transferUserEmailPhoneReceiverStatusValidate) {
+                if ($transferUserEmailPhoneReceiverStatusValidate->getData()->status == true || $transferUserEmailPhoneReceiverStatusValidate->getData()->status == 404) {
                     return back()->withErrors(__($transferUserEmailPhoneReceiverStatusValidate->getData()->message))->withInput();
                 }
             }
@@ -197,27 +167,20 @@ class MoneyTransferController extends Controller
             $request['wallet_id']           = $request->wallet;
             $request['transaction_type_id'] = Transferred;
             $amountLimitCheck               = $this->amountLimitCheck($request);
-            if ($amountLimitCheck->getData()->success->status == 200)
-            {
-                if ($amountLimitCheck->getData()->success->totalAmount > $amountLimitCheck->getData()->success->balance)
-                {
+            if ($amountLimitCheck->getData()->success->status == 200) {
+                if ($amountLimitCheck->getData()->success->totalAmount > $amountLimitCheck->getData()->success->balance) {
                     return back()->withErrors(__("Not have enough balance !"))->withInput();
                 }
-            }
-            else
-            {
+            } else {
                 return back()->withErrors(__($amountLimitCheck->getData()->success->message))->withInput();
             }
             //backend validation ends
 
             $validator = Validator::make($request->all(), $rules, $messages);
             $validator->setAttributeNames($fieldNames);
-            if ($validator->fails())
-            {
+            if ($validator->fails()) {
                 return back()->withErrors($validator)->withInput();
-            }
-            else
-            {
+            } else {
                 //Validation passed
                 $wallet                          = Wallet::with(['currency:id,symbol'])->where(['id' => $request->wallet, 'user_id' => auth()->user()->id])->first(['currency_id', 'balance']);
                 $request['currency_id']          = $wallet->currency->id;
@@ -227,6 +190,7 @@ class MoneyTransferController extends Controller
                 session(['transInfo' => $request->all()]);
                 $data['transInfo'] = $request->all();
             }
+
             return view('user_dashboard.moneytransfer.confirmation', $data);
         }
     }
@@ -242,35 +206,25 @@ class MoneyTransferController extends Controller
         $feesDetails = FeesLimit::where(['transaction_type_id' => $request->transaction_type_id, 'currency_id' => $currency_id])->first(['max_limit', 'min_limit', 'charge_percentage', 'charge_fixed']);
 
         //Code for Amount Limit starts here
-        if (@$feesDetails->max_limit == null)
-        {
-            if ((@$amount < @$feesDetails->min_limit))
-            {
+        if (@$feesDetails->max_limit == null) {
+            if ((@$amount < @$feesDetails->min_limit)) {
                 $success['message'] = __('Minimum amount ') . formatNumber($feesDetails->min_limit);
                 $success['status']  = '401';
-            }
-            else
-            {
+            } else {
                 $success['status'] = 200;
             }
-        }
-        else
-        {
-            if ((@$amount < @$feesDetails->min_limit) || (@$amount > @$feesDetails->max_limit))
-            {
+        } else {
+            if ((@$amount < @$feesDetails->min_limit) || (@$amount > @$feesDetails->max_limit)) {
                 $success['message'] = __('Minimum amount ') . formatNumber($feesDetails->min_limit) . __(' and Maximum amount ') . formatNumber($feesDetails->max_limit);
                 $success['status']  = '401';
-            }
-            else
-            {
+            } else {
                 $success['status'] = 200;
             }
         }
         //Code for Amount Limit ends here
 
         //Code for Fees Limit Starts here
-        if (empty($feesDetails))
-        {
+        if (empty($feesDetails)) {
             $feesPercentage            = 0;
             $feesFixed                 = 0;
             $totalFess                 = $feesPercentage + $feesFixed;
@@ -287,9 +241,7 @@ class MoneyTransferController extends Controller
             $success['min']            = 0;
             $success['max']            = 0;
             $success['balance']        = $wallet->balance;
-        }
-        else
-        {
+        } else {
             $feesPercentage            = $amount * ($feesDetails->charge_percentage / 100);
             $feesFixed                 = $feesDetails->charge_fixed;
             $totalFess                 = $feesPercentage + $feesFixed;
@@ -318,8 +270,7 @@ class MoneyTransferController extends Controller
         $data['submenu'] = 'send';
 
         $sessionValue = session('transInfo');
-        if (empty($sessionValue))
-        {
+        if (empty($sessionValue)) {
             return redirect('moneytransfer');
         }
 
@@ -365,10 +316,8 @@ class MoneyTransferController extends Controller
 
         //Get response
         $response = $this->transfer->processSendMoneyConfirmation($arr, 'web');
-        if ($response['status'] != 200)
-        {
-            if (empty($response['transactionOrTransferId']))
-            {
+        if ($response['status'] != 200) {
+            if (empty($response['transactionOrTransferId'])) {
                 session()->forget('transInfo');
                 $this->helper->one_time_message('error', $response['ex']['message']);
                 return redirect('moneytransfer');

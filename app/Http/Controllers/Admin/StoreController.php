@@ -6,7 +6,7 @@
 *
 *@package Store
 *@author Ahammed Imtiaze <imtiaze.techvill@gmail.com>,  04/09/19
-*@version 
+*@version
 */
 
 namespace App\Http\Controllers\Admin;
@@ -28,10 +28,10 @@ class StoreController extends Controller
     {
         $this->helper = new Common();
     }
-    
+
     /**
      * Index function
-     * 
+     *
      * description: Listing all store information in datatable
      *
      * @param StoreDataTable $datatable
@@ -46,7 +46,7 @@ class StoreController extends Controller
 
     /**
      * Store Add function
-     * 
+     *
      * Store adding form and create store functionalities
      *
      * @param Request $request
@@ -54,10 +54,11 @@ class StoreController extends Controller
      */
     public function add(Request $request)
     {
+        
         $data['menu']     = 'shop';
         $data['sub_menu'] = 'store_list';
         $data['users']      = $user = User::select(['id', 'first_name', 'last_name'])->where(['status' => 'Active'])->get();
-        
+
         if ($_POST) {
 
             $rules = array (
@@ -83,7 +84,7 @@ class StoreController extends Controller
             if ($validator->fails()) {
                 return back()->withErrors($validator)->withInput();
             }
-            
+
             $store                   = new Store();
             $store->name             = $request->name;
             $store->slug             = str_slug($request->name);
@@ -135,8 +136,8 @@ class StoreController extends Controller
 
     /**
      * Update function
-     * 
-     * Description: Update a specific store information 
+     *
+     * Description: Update a specific store information
      *
      * @param Request $request
      * @param [int] $id
@@ -144,14 +145,14 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $data['result'] = $store = Store::find($id);
-        
+
         if (empty($store)) {
             $this->helper->one_time_message('error', __('Store not found!'));
             return redirect('admin/stores');
         }
-        
+
         if ($_POST) {
             $rules = array (
                 'name'          => 'required',
@@ -174,7 +175,7 @@ class StoreController extends Controller
             if ($validator->fails()) {
                 return back()->withErrors($validator)->withInput();
             }
-            
+
             $store->name             = $request->name;
             $store->slug             = str_slug($request->name);
             $store->store_code       = $request->store_code;
@@ -219,11 +220,11 @@ class StoreController extends Controller
             $this->helper->one_time_message('success', 'Store Updated Successfully');
             return redirect('admin/stores');
         }
-        
+
         $data['menu']     = 'shop';
         $data['sub_menu'] = 'store_list';
         $data['users']    = User::select(['id', 'first_name', 'last_name'])->where(['status' => 'Active'])->get();
-           
+
         return view('admin.shop.store.edit', $data);
     }
 
@@ -231,7 +232,7 @@ class StoreController extends Controller
      * Delete function
      *
      * Description: Delete a specific store information
-     * 
+     *
      * @param [int] $id
      * @return void
      */
@@ -243,8 +244,8 @@ class StoreController extends Controller
             return redirect('admin/stores');
         }
 
-        // if ($store->orders->) 
-        if ($store->orders->count() > 0) 
+        // if ($store->orders->)
+        if ($store->orders->count() > 0)
         {
             $this->helper->one_time_message('error','Store cannot be deleted! Order exists!');
             return redirect('admin/stores');
@@ -268,7 +269,7 @@ class StoreController extends Controller
 
     /**
      * StoreCode exist check function
-     * 
+     *
      * Description: Checking in Update form if the store_code available or not
      *
      * @param Request $request
@@ -281,7 +282,7 @@ class StoreController extends Controller
 
     /**
      * Delete Photo function
-     * 
+     *
      * Description: Delete directly Store Photo on store update by clicking on 'X' button
      *
      * @param Request $request

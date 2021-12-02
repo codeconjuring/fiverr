@@ -1,4 +1,4 @@
-@extends('user_dashboard.layouts.app')
+@extends('user_dashboard.layouts.new_app')
 
 @section('css')
     <style>
@@ -64,15 +64,15 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="right mb10" style="padding:10px;">
-                            
+
                         </div>
                         <div class="clearfix"></div>
 
                         <div class="table-responsive">
                             @if($customersOrders->count() > 0)
-    
+
                             <table class="table recent_activity">
                                 <thead>
                                     <tr>
@@ -82,7 +82,7 @@
                                         <td width="8%"><strong>Paid Amount</strong></td>
                                         <td width="8%"><strong>Currency</strong></td>
                                         <td width="16%"><strong>Store Name</strong></td>
-                                        
+
                                         <td width="10%"><strong>Order Date</strong></td>
                                         <td width="8%"><strong>Status</strong></td>
                                         {{-- <td width="12%"><strong>Action</strong></td> --}}
@@ -100,14 +100,14 @@
                                         </td>
                                         <td>{{ $customersOrder->paid_amount }} </td>
                                         <td>{{ $customersOrder->currency->code }} </td>
-                                        <td> 
+                                        <td>
                                             <a href="{{ url('shop/'.$customersOrder->store->id.'/'.$customersOrder->store->slug) }}" target="_blank" style="color:#5B7DCA;">{{ $customersOrder->store->name }}</a>
-                                        </td>                                  
+                                        </td>
                                         <td>{{ $customersOrder->order_date }} </td>
                                         <td><span class="badge badge-success">{{ $customersOrder->status }}</span></td>
                                         {{-- <td>
                                             <a href="#" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></a>
-                                            
+
                                             <form action="#" method="post" style="display: inline">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $customersOrder->id }}">

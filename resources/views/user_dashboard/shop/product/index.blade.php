@@ -1,4 +1,4 @@
-@extends('user_dashboard.layouts.app')
+@extends('user_dashboard.layouts.new_app')
 
 @section('css')
     <style>
@@ -58,7 +58,7 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="right mb10" style="padding:10px;">
                             <a href="{{ url('/products/add') }}" class="btn btn-cust ticket-btn pull-right"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i>&nbsp; Add Product</a>
                         </div>
@@ -66,7 +66,7 @@
 
                         <div class="table-responsive">
                             @if($products->count() > 0)
-    
+
                             <table class="table recent_activity">
                                 <thead>
                                     <tr>
@@ -90,7 +90,7 @@
                                                 <img src="{{url('public/images/shop/product/' . $product->photo)}}" class="rounded-circle rounded-circle-custom-trans">
                                             @else
                                                 <img src="{{url('public/dist/img/shop/product.jpg')}}" class="rounded-circle rounded-circle-custom-trans">
-                                            
+
                                             @endif
                                         </td>
                                         <td >{{ $product->store->name }} </td>
@@ -101,7 +101,7 @@
                                         <td class="">{{ $product->stock }} </td>
                                         <td>
                                             <a href="{{ url('products/edit/'.$product->id) }}" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></a>
-                                            
+
                                             {{-- <form action="{{ url('products/delete') }}" method="post" style="display: inline">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $product->id }}">
@@ -124,7 +124,7 @@
                             {{ $products->links('vendor.pagination.bootstrap-4') }}
                         </div>
 
-                        
+
                     </div>
                 </div>
             </div>

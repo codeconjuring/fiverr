@@ -19,6 +19,7 @@ class ReferralController extends Controller
 
     public function referFriend()
     {
+
         $data['menu'] = 'refer';
 
         $referralLevel = ReferralLevel::with('currency:id,symbol')->where(['status' => 'Active'])->orderBy('priority', 'asc')->first(['currency_id', 'amount']);
@@ -28,13 +29,10 @@ class ReferralController extends Controller
             return redirect('/dashboard');
         }
         // dd(auth()->user()->referral_code->code);
-        if (!empty($referralLevel) && !empty(auth()->user()->referral_code))
-        {
+        if (!empty($referralLevel) && !empty(auth()->user()->referral_code)) {
             // dd('tes1t');
             $data['referralLevel'] = $referralLevel;
-        }
-        else
-        {
+        } else {
             // dd('test2');
             //referral code - starts
             $referralCode = $this->saveReferralCode(auth()->user()->id);

@@ -15,13 +15,17 @@
     @if (!empty(getfavicon()))
     <link rel="shortcut icon" href="{{asset('public/images/logos/'.getfavicon())}}" />
     @endif
+
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="public/images/favicon.png">
     <link href="{{ asset('public/new_dashboard/public/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('public/new_dashboard/public/vendor/jqvmap/css/jqvmap.min.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('public/new_dashboard/public/vendor/chartist/css/chartist.min.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('public/new_dashboard/public/vendor/owl-carousel/owl.carousel.css') }}" rel="stylesheet" type="text/css"/>
+
+
 	<link href="{{ asset('public/new_dashboard/public/css/style.css') }}" rel="stylesheet" type="text/css"/>
+    {{-- <link rel="stylesheet" type="text/css" href="{{asset('public/user_dashboard/css/style.css')}}"> --}}
     @yield('css');
     <script type="text/javascript">
         var SITE_URL = "{{url('/')}}";
@@ -133,7 +137,7 @@
         <li class="ai-icon <?= isset($menu) && ($menu == 'dashboard') ? 'active' : '' ?>"><a href="{{url('/dashboard')}}"><i class="flaticon-381-networking"></i><span class="nav-text">@lang('message.dashboard.nav-menu.dashboard')</span></a></li>
 
         @if(Common::has_permission(auth()->id(),'manage_transaction'))
-            <li class="ai-icon <?= isset($menu) && ($menu == 'transactions') ? 'active' : '' ?>"><a href="{{url('/transactions')}}"><i class="flaticon-381-controls-3"></i><span class="nav-text">@lang('message.dashboard.nav-menu.transactions')</span></a></li>
+            <li class="ai-icon <?= isset($menu) && ($menu == 'transactions') ? 'active mm-active' : '' ?>"><a href="{{url('/transactions')}}"><i class="flaticon-381-controls-3"></i><span class="nav-text">@lang('message.dashboard.nav-menu.transactions')</span></a></li>
         @endif
 
         @if(Common::has_permission(auth()->id(),'manage_transfer'))
@@ -183,8 +187,12 @@
 </div>
 </div>
 
+<div class="content-body">
+    <div class="container-fluid">
+        @yield('content')
 
-@yield('content')
+    </div>
+</div>
 
 <div class="footer">
     <div class="copyright">

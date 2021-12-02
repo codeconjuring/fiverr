@@ -9,8 +9,6 @@
 @section('content')
 
 
-<div class="content-body">
-    <div class="container-fluid">
     <div class="form-head mb-4">
         <h2 class="text-black font-w600 mb-0">@lang('message.dashboard.nav-menu.transactions')</h2>
     </div>
@@ -415,10 +413,6 @@
                 </div>
 
     </div>
-    </div>
-</div>
-
-
 
 
 @endsection

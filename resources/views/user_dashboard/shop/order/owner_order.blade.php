@@ -1,4 +1,4 @@
-@extends('user_dashboard.layouts.app')
+@extends('user_dashboard.layouts.new_app')
 
 @section('css')
     <style>
@@ -58,15 +58,15 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="right mb10" style="padding:10px;">
-                            
+
                         </div>
                         <div class="clearfix"></div>
 
                         <div class="table-responsive">
                             @if($ownerOrders->count() > 0)
-    
+
                             <table class="table recent_activity">
                                 <thead>
                                     <tr>
@@ -85,12 +85,12 @@
                                     @foreach($ownerOrders as $ownerOrder)
                                     <tr>
                                         <td>{{ $ownerOrder->order_id }} </td>
-                                        <td> 
+                                        <td>
                                             <a href="{{ url('shop/product/'.$ownerOrder->product->id) }}" target="_blank" style="color:#5B7DCA;">{{ $ownerOrder->product->title }}</a>
                                         </td>
                                         <td>{{ $ownerOrder->paid_amount }} </td>
                                         <td>{{ $ownerOrder->currency->code }} </td>
-                                        <td> 
+                                        <td>
                                             <a href="{{ url('shop/'.$ownerOrder->store->id.'/'.$ownerOrder->store->slug) }}" target="_blank" style="color:#5B7DCA;">{{ $ownerOrder->store->name }}</a>
                                         </td>
                                         <td>{{ $ownerOrder->store->user->first_name .' '. $ownerOrder->store->user->last_name }} </td>
@@ -98,7 +98,7 @@
                                         <td><span class="badge badge-success">{{ $ownerOrder->status }}</span></td>
                                         {{-- <td>
                                             <a href="#" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></a>
-                                            
+
                                             <form action="#" method="post" style="display: inline">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $ownerOrder->id }}">
@@ -121,7 +121,7 @@
                             {{ $ownerOrders->links() }}
                         </div>
 
-                        
+
                     </div>
                 </div>
             </div>
